@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Housie Multiplayer</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+
+</head>
+
+<body>
+
+
+    <div class="app-container">
+
+
+        <!-- ================= LANDING SCREEN ================= -->
+
+        <section id="screen-landing" class="view active">
+
+            <div class="card landing-card">
+
+                <div class="header-row">
+
+                    <h2 id="live-greeting" class="greeting">Hi, Loading...</h2>
+
+                    <button id="btn-lets-play" class="btn-primary">Let's Play</button>
+
+                </div>
+
+                <hr class="divider-line">
+
+                <div class="info-section">
+
+                    <h3>How to use this website:</h3>
+
+                    <ul class="info-list">
+
+                        <li>Enter your name and choose number of tickets (max 4).</li>
+
+                        <li>Create Room to become host and share Room Code.</li>
+
+                        <li>Join Room using code from host.</li>
+
+                        <li>Host uses Generate Number button.</li>
+
+                        <li>Tap numbers on ticket when they appear.</li>
+
+                        <li>Claim patterns like Jaldi, Lines, or Housie.</li>
+
+                        <li>Leave room anytime using Leave Room button.</li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="info-section">
+
+                    <h3>How to play the Housie game:</h3>
+
+                    <ul class="info-list">
+
+                        <li><strong>Jaldi 5:</strong> First 5 numbers.</li>
+
+                        <li><strong>Lines:</strong> Complete any row.</li>
+
+                        <li><strong>Full House:</strong> All 15 numbers.</li>
+
+                        <li><strong>Validation:</strong> System checks your claim.</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= AUTH SCREEN ================= -->
+
+        <section id="screen-auth" class="view">
+
+            <div class="card auth-card">
+
+                <h1 class="glow-text">Welcome to Housie</h1>
+
+                <div class="input-group">
+
+                    <label>Name</label>
+
+                    <input id="username" placeholder="Enter your name">
+
+
+                    <label>Tickets Count</label>
+
+                    <input id="ticket-count" type="tel" placeholder="1 - 4 tickets">
+
+
+                    <button id="btn-enter" class="btn-primary">Continue</button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= LOBBY SCREEN ================= -->
+
+        <section id="screen-lobby" class="view">
+
+            <div class="card lobby-card">
+
+                <h2>Game Lobby</h2>
+
+                <button id="btn-create" class="btn-primary">Create Room</button>
+
+                <div class="divider">OR</div>
+
+                <h3>Join room:</h3>
+
+                <input id="join-id" placeholder="Enter room code">
+
+                <button id="btn-join" class="btn-outline">Join Room</button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= GAME ARENA ================= -->
+
+        <section id="screen-arena" class="view">
+
+
+            <!-- TOP BAR -->
+
+            <div class="top-bar">
+
+                <div class="room-info">
+
+                    <span class="badge">
+
+                        Room Code: <b id="display-room-id">----</b>
+
+                    </span>
+
+                </div>
+
+
+                <!-- GAME CONTROLS -->
+
+                <div class="game-controls">
+
+                    <button id="btn-draw" class="btn-primary">
+
+                        Generate Number
+
+                    </button>
+
+                    <div id="current-number">
+
+                        --
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TICKETS -->
+
+            <div class="tickets-section">
+
+                <h3>Your Tickets</h3>
+
+                <div id="tickets-container" class="tickets-container"></div>
+
+            </div>
+
+
+            <!-- CLAIM BUTTONS -->
+
+            <div class="card claims-section">
+
+                <div class="claims-buttons">
+
+                    <button class="claim-btn" data-claim="jaldi">Jaldi</button>
+
+                    <button class="claim-btn" data-claim="line1">1st Line</button>
+
+                    <button class="claim-btn" data-claim="line2">2nd Line</button>
+
+                    <button class="claim-btn" data-claim="line3">3rd Line</button>
+
+                    <button class="claim-btn" data-claim="housie">Housie</button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CALLED NUMBERS GRID -->
+
+            <div class="card called-preview">
+
+                <h4>Called Numbers</h4>
+
+                <div id="called-grid" class="mini-grid"></div>
+
+            </div>
+
+
+            <!-- LAST NUMBERS -->
+
+            <div class="card called-history">
+
+                <h4>Last 10 Numbers</h4>
+
+                <div id="called-history-list"></div>
+
+            </div>
+
+
+            <!-- MEMBERS LIST -->
+
+            <div class="member-list-card card">
+
+                <h3>Members</h3>
+
+                <div id="members-list-container" class="members-container"></div>
+
+                <div class="members-summary">
+
+                    <div class="summary-item">
+
+                        Total Members:
+
+                        <span id="total-members">0</span>
+
+                    </div>
+
+                    <div class="summary-item">
+
+                        Total Price: ₹
+
+                        <span id="total-price">0</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEAVE BUTTON -->
+
+            <div class="bottom-actions">
+
+                <button id="btn-leave" class="btn-danger leave-full">
+
+                    Leave Room
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+    </div>
+
+
+    <!-- ================= TICKET POPUP ================= -->
+
+    <div id="ticket-popup" class="popup-overlay">
+
+        <div class="popup-box">
+
+            <h3>Select Ticket</h3>
+
+            <div id="ticket-options" class="ticket-options"></div>
+
+            <button id="popup-close" class="btn-outline">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= LEAVE POPUP ================= -->
+
+    <div id="leave-popup" class="popup-overlay">
+
+        <div class="popup-box">
+
+            <h3>Sure to leave this room?</h3>
+
+            <div class="popup-actions">
+
+                <button id="leave-cancel" class="btn-outline">
+
+                    Cancel
+
+                </button>
+
+                <button id="leave-confirm" class="btn-danger">
+
+                    Leave
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= WIN SCREEN ================= -->
+
+    <div id="win-screen" class="win-overlay">
+
+        <div class="confetti-container"></div>
+
+        <div class="win-box">
+
+            <h1>🎉 Congratulations 🎉</h1>
+
+            <p>You won the game!</p>
+
+            <button id="win-home" class="btn-primary">
+
+                Back to Home
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= GREETING SCRIPT ================= -->
+
+    <script>
+
+        function updateGreeting() {
+
+            const now = new Date();
+
+            const hours = now.getHours();
+
+            let msg = "Hi, ";
+
+
+            if (hours < 12) msg += "Good morning";
+
+            else if (hours < 16) msg += "Good afternoon";
+
+            else msg += "Good evening";
+
+
+            document.getElementById("live-greeting").innerText = msg;
+
+        }
+
+        updateGreeting();
+
+
+        document.getElementById("btn-lets-play").onclick = () => {
+
+            document.getElementById("screen-landing").classList.remove("active");
+
+            document.getElementById("screen-auth").classList.add("active");
+
+        };
+
+    </script>
+
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>

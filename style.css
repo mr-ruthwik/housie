@@ -1,0 +1,682 @@
+:root {
+    --primary: #6366f1;
+    --danger: #ef4444;
+    --accent: #10b981;
+    --bg: #020617;
+    --card: #0f172a;
+    --glass: rgba(255, 255, 255, .04);
+    --border: rgba(255, 255, 255, .08);
+}
+
+/* ================= GLOBAL ================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: white;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 920px;
+    margin: auto;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ================= VIEWS ================= */
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ================= CARD ================= */
+
+.card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    backdrop-filter: blur(8px);
+}
+
+/* ================= LANDING PAGE ================= */
+
+.landing-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 30px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* UPDATED: Solid color with shadow instead of clip-text */
+.greeting {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(99, 102, 241, 0.5);
+}
+
+.divider-line {
+    border: 0;
+    height: 1px;
+    background: var(--border);
+}
+
+.info-section h3 {
+    color: var(--primary);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.info-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-list li {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.85;
+    position: relative;
+    padding-left: 18px;
+}
+
+.info-list li::before {
+    content: "•";
+    color: var(--primary);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* ================= AUTH ================= */
+
+.auth-card {
+    max-width: 380px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.glow-text {
+    text-align: center;
+    color: var(--primary);
+    font-size: 2.2rem;
+    letter-spacing: .5px;
+    font-weight: 800;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-group label {
+    font-size: 13px;
+    opacity: .8;
+}
+
+input {
+    padding: 12px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: #111827;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--primary);
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all .2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-outline {
+    border: 1px solid var(--primary);
+    background: transparent;
+    color: white;
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+}
+
+/* ================= LOBBY ================= */
+
+.lobby-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    max-width: 420px;
+    margin: auto;
+    text-align: center;
+}
+
+.lobby-card h2 {
+    margin-bottom: 5px;
+}
+
+.lobby-card h3 {
+    font-size: 15px;
+    opacity: 0.8;
+    width: 100%;
+    text-align: left;
+}
+
+.lobby-card input,
+.lobby-card button {
+    width: 100%;
+}
+
+.divider {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    font-size: 13px;
+    opacity: .6;
+    margin: 10px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 42%;
+    height: 1px;
+    background: var(--border);
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+/* ================= TOP BAR ================= */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 5px;
+}
+
+.badge {
+    background: #1f2937;
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+}
+
+/* ================= GAME CONTROLS ================= */
+
+.game-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#current-number {
+    font-size: 32px;
+    font-weight: 800;
+    min-width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================= TICKETS ================= */
+
+.tickets-section h3 {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.tickets-container {
+    display: grid;
+    gap: 12px;
+}
+
+@media(min-width:800px) {
+    .tickets-container[data-count="4"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tickets-container[data-count="3"] {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tickets-container[data-count="2"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tickets-container[data-count="1"] {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:799px) {
+    .tickets-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================= TICKET CARD ================= */
+
+.ticket-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #020617;
+}
+
+.ticket-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+/* ================= TICKET GRID ================= */
+
+.ticket-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ticket-row {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 4px;
+    position: relative;
+}
+
+.cell {
+    aspect-ratio: 1/1.1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 5px;
+    background: #1f2937;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.cell.empty {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, .08);
+    cursor: default;
+}
+
+.cell.active {
+    background: var(--primary);
+}
+
+.cell.claimed {
+    background: var(--accent);
+    color: #000;
+}
+
+.cell.strike::after {
+    content: "";
+    position: absolute;
+    width: 130%;
+    height: 2px;
+    background: var(--danger);
+    transform: rotate(-30deg);
+}
+
+.ticket-row.line-strike::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 3px;
+    background: var(--danger);
+    transform: translateY(-50%);
+    box-shadow: 0 0 8px var(--danger);
+}
+
+/* ================= CLAIM BUTTONS ================= */
+
+.claims-buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.claim-btn {
+    background: #1f2937;
+    font-size: 11px;
+    padding: 10px 5px;
+}
+
+/* ================= CALLED NUMBERS ================= */
+
+.mini-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+}
+
+.mini-cell {
+    background: #1f2937;
+    font-size: 10px;
+    text-align: center;
+    padding: 6px 2px;
+    border-radius: 4px;
+    opacity: 0.5;
+}
+
+.mini-cell.called {
+    background: var(--accent);
+    color: black;
+    opacity: 1;
+    font-weight: bold;
+}
+
+/* ================= LAST CALLED ================= */
+
+#called-history-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.called-num {
+    background: var(--primary);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* ================= MEMBERS ================= */
+
+.member-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #111827;
+    margin-bottom: 4px;
+}
+
+.member-host {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: bold;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+/* ================= MEMBERS SUMMARY ================= */
+
+.members-summary {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.summary-item span {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* ================= POPUPS ================= */
+
+.popup-box {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+    width: 300px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ================= WIN SCREEN ================= */
+
+.win-box h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.win-box p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* ================= CONFETTI ================= */
+
+.confetti {
+    position: absolute;
+    width: 6px;
+    height: 10px;
+    background: var(--primary);
+    animation: fall 6s linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg)
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(360deg)
+    }
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:500px) {
+    .header-row {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .greeting {
+        font-size: 1.5rem;
+    }
+
+    .claims-buttons {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cell {
+        font-size: 11px;
+    }
+}
+
+
+
+
+/* ================= POPUP OVERLAY ================= */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1000;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+/* popup box */
+
+.popup-box {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+    width: 320px;
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ticket options */
+
+.ticket-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* popup buttons */
+
+.popup-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+
+/* ================= WIN SCREEN ================= */
+
+.win-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2000;
+}
+
+.win-overlay.active {
+    display: flex;
+}
+
+.win-box {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    padding: 40px;
+    text-align: center;
+
+    max-width: 420px;
+    width: 90%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ================= CONFETTI ================= */
+
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
