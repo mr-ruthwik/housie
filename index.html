@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#020617">
+    <title>Housie Multiplayer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=43">
+
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+</head>
+
+<body>
+
+    <!-- ================= ICON SPRITE (use with <svg class="ico"><use href="#i-name"/></svg>) ================= -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <symbol id="i-home" viewBox="0 0 24 24">
+                <path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-chat" viewBox="0 0 24 24">
+                <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-gift" viewBox="0 0 24 24">
+                <path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8c-3 0-5-1-5-3s3-2 5 3c2-5 5-5 5-3s-2 3-5 3z" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-play" viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-chart" viewBox="0 0 24 24">
+                <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-user" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M4 21c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-back" viewBox="0 0 24 24">
+                <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-copy" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M5 15V5a1 1 0 0 1 1-1h10" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-more" viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="1.8" fill="currentColor" />
+                <circle cx="12" cy="12" r="1.8" fill="currentColor" />
+                <circle cx="12" cy="19" r="1.8" fill="currentColor" />
+            </symbol>
+            <symbol id="i-trophy" viewBox="0 0 24 24">
+                <path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4v2a3 3 0 0 0 4 3M16 6h4v2a3 3 0 0 1-4 3M12 14v4M8 21h8"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-clock" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-help" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-logout" viewBox="0 0 24 24">
+                <path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-spark" viewBox="0 0 24 24">
+                <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-palette" viewBox="0 0 24 24">
+                <path
+                    d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2z"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                <circle cx="7.5" cy="11" r="1.2" fill="currentColor" />
+                <circle cx="11" cy="7" r="1.2" fill="currentColor" />
+                <circle cx="16" cy="8" r="1.2" fill="currentColor" />
+            </symbol>
+            <symbol id="i-edit" viewBox="0 0 24 24">
+                <path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-trash" viewBox="0 0 24 24">
+                <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-mic" viewBox="0 0 24 24">
+                <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-mic-off" viewBox="0 0 24 24">
+                <path d="M9 9v2a3 3 0 0 0 5 2.2M15 10.5V6a3 3 0 0 0-5.7-1.3" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M5 11a7 7 0 0 0 11.2 5.6M19 11a7 7 0 0 1-.6 2.8M12 18v3M8 21h8M3 3l18 18" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- ================= TOP NAV ================= -->
+    <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Main">
+        <button class="nav-item active" data-open="home"><svg class="ico">
+                <use href="#i-home" />
+            </svg><span>Home</span></button>
+        <button class="nav-item" data-open="earn"><svg class="ico">
+                <use href="#i-gift" />
+            </svg><span>Tasks</span><i class="nav-badge" data-badge="earn" aria-hidden="true"></i></button>
+        <button class="nav-item" data-open="stats"><svg class="ico">
+                <use href="#i-chart" />
+            </svg><span>Analytics</span></button>
+        <button class="nav-item" data-open="profile"><svg class="ico">
+                <use href="#i-user" />
+            </svg><span>Profile</span><i class="nav-badge" data-badge="updates" aria-hidden="true"></i></button>
+    </nav>
+
+    <div class="app-container">
+
+        <!-- ================= 1. WELCOME ================= -->
+        <section id="screen-welcome" class="view active">
+            <div class="welcome-wrap">
+                <div class="logo-mark" aria-hidden="true">H</div>
+                <h1 class="glow-text">Housie</h1>
+
+                <button id="btn-google" type="button" class="btn-outline btn-google">
+                    <svg class="google-icon" viewBox="0 0 48 48" width="18" height="18" aria-hidden="true">
+                        <path fill="#FFC107"
+                            d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+                        <path fill="#FF3D00"
+                            d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+                        <path fill="#4CAF50"
+                            d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+                        <path fill="#1976D2"
+                            d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+                    </svg>
+                    <span id="btn-google-text">Sign in with Google</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= 2. HOME ================= -->
+        <section id="screen-home" class="view">
+
+            <header class="app-header">
+                <div class="who">
+                    <div id="home-avatar" class="avatar" aria-hidden="true">P</div>
+                    <div>
+                        <small id="home-greeting">Welcome back</small>
+                        <strong id="home-name">Player</strong>
+                    </div>
+                </div>
+                <div class="coin-chip" title="Your coins">🪙 <b data-coin>--</b></div>
+            </header>
+
+            <!-- Daily bonus -->
+            <div class="card bonus-banner">
+                <div>
+                    <h4>Daily bonus</h4>
+                    <p class="bonus-line hidden" data-timer-only></p>
+                    <p id="bonus-text" class="hidden">Claim your coins for today.</p>
+                    <div id="streak-dots" class="streak-dots hidden" aria-label="7 day streak"></div>
+                </div>
+                <button id="btn-claim-bonus" class="btn-primary btn-sm">Claim</button>
+            </div>
+
+            <!-- Resume -->
+            <div id="resume-card" class="card resume-card hidden">
+                <div>
+                    <h4>Game in progress</h4>
+                    <p>Room <b id="resume-room">----</b></p>
+                </div>
+                <button id="btn-resume" class="btn-primary btn-sm">Rejoin</button>
+            </div>
+
+            <!-- Primary actions -->
+            <div class="action-grid">
+                <button id="home-create" class="card action-card" data-open="lobby" data-tab="create">
+                    <svg class="ico">
+                        <use href="#i-play" />
+                    </svg>
+                    <strong>Create room</strong>
+                    <small>Host a game</small>
+                </button>
+                <button id="home-join" class="card action-card" data-open="lobby" data-tab="join">
+                    <svg class="ico">
+                        <use href="#i-user" />
+                    </svg>
+                    <strong>Join with code</strong>
+                    <small>Enter a room code</small>
+                </button>
+            </div>
+
+            <!-- Share coins + Play with Developer + History + Chat -->
+            <div class="action-grid">
+                <button id="home-share-card" class="card action-card card-share" data-open="share" type="button">
+                    <svg class="ico">
+                        <use href="#i-gift" />
+                    </svg>
+                    <strong>Share coins</strong>
+                    <small>Share coins with your friends</small>
+                </button>
+                <!-- Play with Developer (hidden until the developer account is found) -->
+                <button id="home-dev-card" class="card action-card card-dev hidden" data-open="devlobby" type="button">
+                    <svg class="ico">
+                        <use href="#i-spark" />
+                    </svg>
+                    <span id="dev-card-avatar" class="hidden">D</span>
+                    <strong>Play with Developer</strong>
+                    <small><span id="dev-card-name">Developer</span> · 🪙 <b id="dev-card-coins">--</b></small>
+                    <small class="dev-card-cta-line hidden"><span id="dev-card-cta"></span></small>
+                </button>
+                <button id="home-history-card" class="card action-card card-history" data-open="history" type="button">
+                    <svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>
+                    <strong>History</strong>
+                    <small>Past games</small>
+                </button>
+                <button id="home-chat-card" class="card action-card card-chat" data-open="chat" type="button">
+                    <svg class="ico">
+                        <use href="#i-chat" />
+                    </svg>
+                    <strong>Chat</strong>
+                    <small>Chat with your friends</small>
+                </button>
+            </div>
+
+            <div id="home-tasks" class="hidden"></div>
+
+
+            <div id="recent-sessions" class="hidden"></div>
+        </section>
+
+        <!-- ================= 3. ROOM SETUP (Create | Join) ================= -->
+        <section id="screen-lobby" class="view">
+
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Play</h2>
+                <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+            </header>
+
+            <div class="tabs" role="tablist" id="lobby-tabs">
+                <button class="tab active" data-tab="create" role="tab">Create</button>
+                <button class="tab" data-tab="join" role="tab">Join</button>
+            </div>
+
+            <!-- Create panel -->
+            <div class="card form-card tab-panel active" data-panel="create">
+                <div id="lobby-shared" class="lobby-shared">
+                    <label for="username">Your name</label>
+                    <input id="username" placeholder="Enter your name" autocomplete="nickname">
+
+                    <label for="ticket-count">Tickets</label>
+                    <div class="stepper">
+                        <button type="button" id="tk-minus" aria-label="Fewer tickets">−</button>
+                        <input id="ticket-count" type="tel" value="1" placeholder="1 - 4" readonly>
+                        <button type="button" id="tk-plus" aria-label="More tickets">+</button>
+                    </div>
+                </div>
+
+                <label for="ticket-price">Ticket price (coins)</label>
+                <div class="chips" id="price-chips">
+                    <button type="button" class="chip" data-price="10">10</button>
+                    <button type="button" class="chip" data-price="25">25</button>
+                    <button type="button" class="chip" data-price="50">50</button>
+                    <button type="button" class="chip" data-price="100">100</button>
+                </div>
+                <input id="ticket-price" type="tel" value="10" placeholder="0 - 500 coins">
+
+                <div class="cost-line">You pay <b id="cost-total">10</b> coins to start</div>
+                <p id="low-balance" class="notice hidden">You need <b id="low-need">0</b> more coins. <button
+                        class="link-btn" data-open="earn">Earn coins</button></p>
+
+                <button id="btn-create" class="btn-primary">Create room</button>
+            </div>
+
+            <!-- Join panel -->
+            <div class="card form-card tab-panel" data-panel="join">
+                <label for="join-id">Room code</label>
+                <input id="join-id" placeholder="Enter room code" autocapitalize="characters" autocomplete="off">
+
+                <div id="room-preview" class="room-preview hidden">
+                    <div><small>Host</small><b id="rp-host">--</b></div>
+                    <div><small>Ticket</small><b id="rp-price">--</b></div>
+                    <div><small>Players</small><b id="rp-players">--</b></div>
+                </div>
+
+                <button id="btn-join" class="btn-primary">Join room</button>
+            </div>
+        </section>
+
+        <!-- ================= DEVELOPER LOBBY ================= -->
+        <section id="screen-devlobby" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Play with Developer</h2>
+                <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+            </header>
+
+            <div class="card dev-vs-card">
+                <div class="dev-vs-row">
+                    <div class="dev-vs-side">
+                        <div id="devlobby-avatar" class="avatar" aria-hidden="true">D</div>
+                        <strong id="devlobby-name">Developer</strong>
+                        <span class="auto-badge">⚡ Auto-Play Opponent</span>
+                        <small>🪙 <b id="devlobby-dev-coins">--</b></small>
+                    </div>
+                    <span class="dev-vs-x">VS</span>
+                    <div class="dev-vs-side">
+                        <div id="devlobby-my-avatar" class="avatar" aria-hidden="true">P</div>
+                        <strong id="devlobby-my-name">You</strong>
+                        <small>🪙 <b data-coin>--</b></small>
+                    </div>
+                </div>
+                <p class="dev-vs-note">The developer's ticket marks itself and claims prizes the instant a number is
+                    called — it never misses and never waits. Think of it as a tough, always-sharp opponent rather
+                    than a fair coin flip.</p>
+            </div>
+
+            <div class="card form-card">
+                <label for="devlobby-tickets">Tickets</label>
+                <div class="stepper">
+                    <button type="button" id="devtk-minus" aria-label="Fewer tickets">−</button>
+                    <input id="devlobby-tickets" type="tel" value="1" placeholder="1 - 4" readonly>
+                    <button type="button" id="devtk-plus" aria-label="More tickets">+</button>
+                </div>
+
+                <label for="dev-stake-chips">Game price (you and the developer each pay this)</label>
+                <div class="chips" id="dev-stake-chips">
+                    <button type="button" class="chip" data-stake="10">10</button>
+                    <button type="button" class="chip active" data-stake="25">25</button>
+                    <button type="button" class="chip" data-stake="50">50</button>
+                    <button type="button" class="chip" data-stake="100">100</button>
+                    <button type="button" class="chip" data-stake="500">500</button>
+                </div>
+
+                <div class="dev-pot-line">
+                    <div><small>You pay</small><b id="dev-pot-mine">25</b></div>
+                    <div><small>Developer pays</small><b id="dev-pot-dev">25</b></div>
+                    <div><small>Total coins</small><b id="dev-pot-total">50</b></div>
+                </div>
+                <p id="dev-low-balance" class="notice hidden">You need <b id="dev-low-need">0</b> more coins. <button
+                        class="link-btn" data-open="earn">Earn coins</button></p>
+                <p id="dev-busy-notice" class="notice hidden">The developer is already in a challenge right now. Try
+                    again shortly.</p>
+
+                <button id="btn-dev-start" class="btn-primary">Start Game</button>
+            </div>
+        </section>
+
+        <!-- ================= 4. GAME ARENA ================= -->
+        <section id="screen-arena" class="view">
+
+            <!-- Sticky top: bar + reserved empty slot where toasts (number drawn etc.) show, so they never cover tickets -->
+            <div class="arena-top">
+                <div class="top-bar arena-head">
+                    <div class="room-info">
+                        <span id="arena-room-badge" class="badge"><span class="lbl">Room</span> <b
+                                id="display-room-id">----</b></span>
+                        <span id="arena-dev-badge" class="badge dev-badge hidden">⚡ Auto-Play Opponent</span>
+                    </div>
+                    <div class="game-controls">
+                        <div id="current-number">--</div>
+                        <button id="btn-draw" class="btn-primary">Generate Number</button>
+                    </div>
+                    <div class="top-right">
+                        <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+                        <div class="menu-wrap">
+                            <button id="btn-menu" class="icon-btn" aria-label="Menu" aria-expanded="false"><svg
+                                    class="ico">
+                                    <use href="#i-more" />
+                                </svg></button>
+                            <div id="menu-dropdown" class="dropdown hidden">
+                                <button id="btn-members" class="dropdown-item">Members</button>
+                                <button id="btn-leave" class="dropdown-item danger">Leave room</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="arena-toast-slot" aria-live="polite"></div>
+            </div>
+
+            <!-- Tickets -->
+            <div class="tickets-section">
+                <div id="tickets-container" class="tickets-container"></div>
+            </div>
+
+            <!-- Called numbers (after tickets) -->
+            <div class="card">
+                <h4>Called numbers</h4>
+                <div id="called-grid" class="mini-grid"></div>
+            </div>
+
+            <!-- Last 5 (after called numbers) -->
+            <div class="card last-numbers">
+                <small>Last 5</small>
+                <div id="called-history-list"></div>
+            </div>
+
+            <!-- Prizes -->
+            <div class="card">
+                <h4>Prizes <span id="prize-pot" class="prize-pot"></span></h4>
+                <div id="prize-list" class="prize-list"></div>
+            </div>
+
+            <!-- Sticky claim bar -->
+            <div class="claim-bar">
+                <div class="claims-buttons">
+                    <button class="claim-btn" data-claim="jaldi">Jaldi</button>
+                    <button class="claim-btn" data-claim="line1">1st Line</button>
+                    <button class="claim-btn" data-claim="line2">2nd Line</button>
+                    <button class="claim-btn" data-claim="line3">3rd Line</button>
+                    <button class="claim-btn" data-claim="housie">Housie</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. EARN ================= -->
+        <section id="screen-earn" class="view">
+            <header class="page-head">
+                <h2>Earn coins</h2>
+                <button class="icon-btn edit-btn" type="button" data-open="history" data-filter="task"
+                    aria-label="Reward history"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg><span>History</span></button>
+                <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+            </header>
+
+            <div class="card bonus-banner">
+                <div>
+                    <h4>Login streak</h4>
+                    <p class="bonus-line">Get 1000 coins every day</p>
+                    <p id="earn-streak-text" class="hidden">Come back every day for a bigger reward.</p>
+                    <div id="earn-streak-dots" class="streak-dots hidden"></div>
+                </div>
+                <button id="earn-claim" class="btn-primary btn-sm">Claim</button>
+            </div>
+
+            <div id="refill-card" class="card resume-card hidden">
+                <div>
+                    <h4>Free refill</h4>
+                    <p>Low on coins? Get 30 coins, once a day.</p>
+                </div>
+                <button id="btn-refill" class="btn-primary btn-sm">Get 30</button>
+            </div>
+
+            <div class="card lucky-card">
+                <div>
+                    <h4>Try your luck</h4>
+                    <p id="wheel-text">One spin a day. Win 100 to 500 coins.</p>
+                </div>
+                <button id="btn-spin" class="btn-primary btn-sm">Spin</button>
+            </div>
+
+            <div class="tabs" id="task-tabs">
+                <button class="tab active" data-tab="daily">Daily<span class="tab-count"
+                        data-count="daily"></span></button>
+                <button class="tab" data-tab="weekly">Weekly<span class="tab-count" data-count="weekly"></span></button>
+                <button class="tab" data-tab="monthly">Monthly<span class="tab-count"
+                        data-count="monthly"></span></button>
+            </div>
+
+            <div class="tab-panel active" data-panel="daily">
+                <div class="set-timer" style="margin-top:var(--s3)"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>Refreshes in <b class="set-reset" data-set="daily">--</b></div>
+                <div id="tasks-daily" class="list" style="margin-top:var(--s2)"></div>
+            </div>
+
+            <div class="tab-panel" data-panel="weekly">
+                <div class="set-timer" style="margin-top:var(--s3)"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>Refreshes in <b class="set-reset" data-set="weekly">--</b></div>
+                <div id="tasks-weekly" class="list" style="margin-top:var(--s2)"></div>
+            </div>
+
+            <div class="tab-panel" data-panel="monthly">
+                <div class="set-timer" style="margin-top:var(--s3)"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>Refreshes in <b class="set-reset" data-set="monthly">--</b></div>
+                <div id="tasks-monthly" class="list" style="margin-top:var(--s2)"></div>
+            </div>
+
+            <div id="tasks-once" class="hidden"></div>
+        </section>
+
+        <!-- ================= 7. PROFILE ================= -->
+        <section id="screen-profile" class="view">
+            <div class="card profile-card">
+                <div id="profile-avatar" class="avatar lg" aria-hidden="true">P</div>
+                <div class="profile-main">
+                    <div class="name-row">
+                        <input id="profile-name" class="inline-input" placeholder="Display name" maxlength="30"
+                            readonly>
+                        <button id="profile-edit" class="icon-btn edit-btn" type="button" aria-label="Edit name"><svg
+                                class="ico">
+                                <use href="#i-edit" />
+                            </svg><span>Edit</span></button>
+                    </div>
+                    <small id="profile-email">--</small>
+                </div>
+            </div>
+
+            <div class="card form-card">
+                <div class="theme-head">
+                    <label class="theme-title"><svg class="ico">
+                            <use href="#i-palette" />
+                        </svg>Ticket theme</label>
+                    <label class="switch-row" for="theme-random"><span>Random mix</span>
+                        <input type="checkbox" id="theme-random" class="switch" checked>
+                    </label>
+                </div>
+                <div class="chips" id="theme-chips">
+                    <button type="button" class="chip theme-indigo active" data-theme="indigo">Indigo</button>
+                    <button type="button" class="chip theme-emerald" data-theme="emerald">Emerald</button>
+                    <button type="button" class="chip theme-amber" data-theme="amber">Amber</button>
+                    <button type="button" class="chip theme-rose" data-theme="rose">Rose</button>
+                    <button type="button" class="chip theme-ocean" data-theme="ocean">Ocean</button>
+                    <button type="button" class="chip theme-violet" data-theme="violet">Violet</button>
+                    <button type="button" class="chip theme-lime" data-theme="lime">Lime</button>
+                    <button type="button" class="chip theme-orange" data-theme="orange">Orange</button>
+                </div>
+            </div>
+
+            <div class="card menu-list">
+                <button class="menu-row" data-open="history"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>History</button>
+                <button class="menu-row" data-open="updates"><svg class="ico">
+                        <use href="#i-spark" />
+                    </svg>Updates<i class="dot-new" aria-hidden="true"></i></button>
+                <button class="menu-row" data-open="leaderboard"><svg class="ico">
+                        <use href="#i-trophy" />
+                    </svg>Leaderboard</button>
+            </div>
+
+            <button id="profile-admin" class="btn-outline signout-btn hidden" type="button" data-open="admin"><svg
+                    class="ico">
+                    <use href="#i-trophy" />
+                </svg>Admin dashboard</button>
+
+            <button id="profile-delete" class="btn-outline signout-btn delete-btn" type="button"><svg class="ico">
+                    <use href="#i-trash" />
+                </svg>Delete account</button>
+
+            <button id="profile-signout" class="btn-danger signout-btn" type="button"><svg class="ico">
+                    <use href="#i-logout" />
+                </svg>Sign out</button>
+        </section>
+
+        <!-- ================= 8. STATS ================= -->
+        <section id="screen-stats" class="view">
+            <header class="page-head">
+                <h2>Your stats</h2>
+            </header>
+
+            <div class="stat-grid">
+                <div class="stat"><b id="st-games">0</b><small>Games played</small></div>
+                <div class="stat"><b id="st-wins">0</b><small>Wins</small></div>
+                <div class="stat"><b id="st-winrate">0%</b><small>Win rate</small></div>
+                <div class="stat hidden"><b id="st-net">0</b><small>Net coins</small></div>
+                <div class="stat"><b id="st-streak">0</b><small>Best streak</small></div>
+            </div>
+
+            <div class="card chart-card hidden">
+                <div class="section-head">
+                    <h4>Coins over time</h4>
+                    <div class="tabs mini" id="range-tabs">
+                        <button class="tab active" data-range="7">7d</button>
+                        <button class="tab" data-range="30">30d</button>
+                        <button class="tab" data-range="all">All</button>
+                    </div>
+                </div>
+                <div id="chart-coins" class="chart" role="img" aria-label="Coins over time"></div>
+            </div>
+
+            <div class="card chart-card">
+                <h4>Prizes won</h4>
+                <div id="chart-prizes" class="chart" role="img" aria-label="Prizes won by type"></div>
+            </div>
+
+            <div class="card">
+                <h4>Hosting</h4>
+                <div class="kv-list">
+                    <div><span>Rooms hosted</span><b id="st-hosted">0</b></div>
+                </div>
+            </div>
+
+            <div class="card insight">
+                <p id="st-insight">Play a few games to see insights here.</p>
+            </div>
+        </section>
+
+        <!-- ================= UPDATES (add new dated groups at the top) ================= -->
+        <section id="screen-updates" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Updates</h2>
+                <span></span>
+            </header>
+
+            <h4 class="upd-date"><span>Today · 7 Nov 2026</span><span class="upd-count">3 updates</span></h4>
+            <div class="list upd-list">
+                <div class="card upd-item" data-upd-id="upd-2026-11-07-3">
+                    <div><b>Leaving a developer game</b><small>Leave before any number is called and both entry fees are
+                            returned. Leave after play has started and your entry fee is not refunded, and any prizes
+                            left go to the developer.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-07-3">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-07-2">
+                    <div><b>Developer tab in History</b><small>New Developer tab in History shows your entry fees,
+                            refunds and prizes from games with the developer.</small>
+                    </div>
+                    <div class="upd-actions">
+                        <button class="btn-primary btn-sm check-upd-btn" type="button" data-open="history">Check
+                            update</button>
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-07-2">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-07-1">
+                    <div><b>Play with Developer</b><small>New card on Home beside Share coins. Pick a game price and
+                            tickets, then play one-on-one against the developer, who marks numbers and claims prizes
+                            instantly. Win to take the total coins.</small>
+                    </div>
+                    <div class="upd-actions">
+                        <button class="btn-primary btn-sm check-upd-btn" type="button" data-open="devlobby">Check
+                            update</button>
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-07-1">Mark as read</button>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="upd-date"><span>5 Nov 2026</span><span class="upd-count">3 updates</span></h4>
+            <div class="list upd-list">
+                <div class="card upd-item" data-upd-id="upd-2026-11-05-3">
+                    <div><b>See your friends' codes</b><small>New dropdown under Your 4-digit code in Share coins. It
+                            lists
+                            players with their name, code and coins.</small>
+                    </div>
+                    <div class="upd-actions">
+                        <button class="btn-primary btn-sm check-upd-btn" type="button" data-open="share"
+                            data-focus="#friends-toggle">Check update</button>
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-05-3">Mark as read</button>
+                    </div>
+                </div>
+
+                <div class="card upd-item" data-upd-id="upd-2026-11-05-2">
+                    <div><b>History on Earn</b><small>New History button on the Earn screen opens your task
+                            rewards.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-05-2">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-05-1">
+                    <div><b>Daily, weekly and monthly tasks</b><small>Daily resets at midnight,
+                            weekly on
+                            Monday and monthly on the 1st, with a Refreshes in countdown on every tab.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-05-1">Mark as read</button>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="upd-date"><span>4 Nov 2026</span><span class="upd-count">1 update</span></h4>
+            <div class="list upd-list">
+                <div class="card upd-item" data-upd-id="upd-2026-11-04-1">
+                    <div><b>Chat with friends</b><small>Message your friends right from the app.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-04-1">Mark as read</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <h4 class="upd-date"><span>3 Nov 2026</span><span class="upd-count">6 updates</span></h4>
+            <div class="list upd-list">
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-7">
+                    <div><b>Ticket themes</b><small>4 new themes and a Random mix switch, on by default.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-7">Mark as read</button>
+                    </div>
+                </div>
+
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-6">
+                    <div><b>Try your luck</b><small>Spin wins 100 to 500 coins.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-6">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-5">
+                    <div><b>Daily task rewards</b><small>Play 1 game 100, Win any prize 500, new Win one Jaldi
+                            250.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-5">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-4">
+                    <div><b>Updates tab</b><small>New Updates row in Profile to catch what's changed, with an unread
+                            count until you mark it read.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-4">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-3">
+                    <div><b>Back gesture</b><small>Swipe back or press Back to move between screens, close popups, or
+                            leave a room.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-3">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-2">
+                    <div><b>Edit your name</b><small>New edit button beside your name in Profile. Tap it to change your
+                            display name.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-2">Mark as read</button>
+                    </div>
+                </div>
+                <div class="card upd-item" data-upd-id="upd-2026-11-03-1">
+                    <div><b>Share coins</b><small>Every player has a 4-digit code. Enter a friend's code and send them
+                            any amount of your coins.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-03-1">Mark as read</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CHAT (all users) ================= -->
+        <section id="screen-chat" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Chat with your friends</h2>
+                <span></span>
+            </header>
+            <div id="chat-list" class="chat-list"></div>
+            <div class="chat-compose">
+                <textarea id="chat-input" rows="1" placeholder="Write a message" autocomplete="off"></textarea>
+                <button id="chat-send" class="btn-primary" type="button">Send</button>
+            </div>
+        </section>
+
+        <!-- ================= 9. LEADERBOARD ================= -->
+        <section id="screen-leaderboard" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Richest players</h2>
+                <span></span>
+            </header>
+            <div id="lb-list" class="list"></div>
+        </section>
+
+        <!-- ================= ADMIN DASHBOARD (owner only) ================= -->
+        <section id="screen-admin" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Admin dashboard</h2>
+                <span></span>
+            </header>
+            <div class="tabs scroll-x" id="admin-tabs">
+                <button class="tab active" data-tab="a-overview">Overview</button>
+                <button class="tab" data-tab="a-users">Users</button>
+                <button class="tab" data-tab="a-rooms">Rooms</button>
+                <button class="tab" data-tab="a-tx">Transactions</button>
+            </div>
+
+            <div class="tab-panel active" data-panel="a-overview">
+                <div id="admin-stats" class="list"></div>
+                <button id="admin-backup-export" class="btn-outline signout-btn" type="button"><svg class="ico">
+                        <use href="#i-copy" />
+                    </svg>Export data</button>
+                <button id="admin-backup-import" class="btn-outline signout-btn" type="button"><svg class="ico">
+                        <use href="#i-copy" />
+                    </svg>Import data</button>
+                <input id="admin-backup-file" type="file" accept="application/json,.json" hidden>
+                <small class="live-note">● Live: updates automatically</small>
+            </div>
+
+            <div class="tab-panel" data-panel="a-users">
+                <div class="search-box">
+                    <svg class="search-ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="20" y1="20" x2="16.5" y2="16.5"></line>
+                    </svg>
+                    <input id="admin-search" type="search" placeholder="Search by name or ID" autocomplete="off"
+                        aria-label="Search users by name or ID">
+                    <button id="admin-search-clear" class="search-clear hidden" type="button"
+                        aria-label="Clear search">&times;</button>
+                </div>
+                <div class="chips" id="admin-user-filters">
+                    <button type="button" class="chip active" data-f="all">All</button>
+                    <button type="button" class="chip" data-f="ingame">In a game</button>
+                    <button type="button" class="chip" data-f="name">A-Z</button>
+                </div>
+                <div class="admin-bulk">
+                    <button id="admin-users-releaseall" class="btn-outline btn-sm" type="button" disabled>Release all
+                        in-game</button>
+                </div>
+                <div id="admin-list" class="list">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="a-rooms">
+                <div class="chips" id="admin-room-filters">
+                    <button type="button" class="chip active" data-f="live">Live</button>
+                    <button type="button" class="chip" data-f="all">All recent</button>
+                </div>
+                <div class="admin-bulk">
+                    <button id="admin-rooms-endall" class="btn-outline btn-sm" type="button" disabled>End all
+                        live</button>
+                    <button id="admin-rooms-cleanall" class="btn-outline btn-sm" type="button" disabled>Clean finished
+                        data</button>
+                    <button id="admin-rooms-delall" class="btn-danger btn-sm" type="button" disabled>Delete all</button>
+                </div>
+                <div id="admin-rooms" class="list">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="a-tx">
+                <div class="chips" id="admin-tx-filters">
+                    <button type="button" class="chip active" data-f="all">All</button>
+                </div>
+                <small id="admin-tx-note" class="live-note"></small>
+                <div id="admin-tx-list" class="list">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SHARE COINS ================= -->
+        <section id="screen-share" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Share coins</h2>
+                <span></span>
+            </header>
+
+            <div class="card share-card">
+                <small>Your 4-digit code</small>
+                <div class="share-code-row">
+                    <b id="share-code">--</b>
+                    <button id="share-copy" class="btn-outline btn-sm" type="button">Copy</button>
+                </div>
+                <small>Share this code with friends so they can send you coins.</small>
+
+                <button id="friends-toggle" class="btn-outline friends-toggle" type="button" aria-expanded="false"
+                    aria-controls="friends-panel">
+                    <span>See your friends' codes</span><span class="chev" aria-hidden="true">▾</span>
+                </button>
+                <div id="friends-panel" class="friends-panel hidden">
+                    <div id="friends-list" class="friends-list"></div>
+                </div>
+            </div>
+
+            <div class="card share-card">
+                <label class="au-label" for="share-to">Friend's code</label>
+                <input id="share-to" class="share-input" type="text" inputmode="numeric" pattern="[0-9]*"
+                    placeholder="4-digit code" autocomplete="off" maxlength="4">
+
+                <label class="au-label" for="share-amount">Amount</label>
+                <div class="chips" id="share-amounts">
+                    <button type="button" class="chip" data-a="50">50</button>
+                    <button type="button" class="chip" data-a="100">100</button>
+                    <button type="button" class="chip" data-a="200">200</button>
+                    <button type="button" class="chip" data-a="500">500</button>
+                </div>
+                <input id="share-amount" class="share-input" type="number" inputmode="numeric" min="1"
+                    placeholder="Or type any amount">
+
+                <button id="share-send" class="btn-primary signout-btn" type="button">Send coins</button>
+            </div>
+        </section>
+
+        <!-- ================= 10. HISTORY ================= -->
+        <section id="screen-history" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>History</h2>
+                <span></span>
+            </header>
+            <div class="tabs scroll-x" id="hist-filters">
+                <button class="tab active" data-filter="all">All</button>
+                <button class="tab" data-filter="prize">Wins</button>
+                <button class="tab" data-filter="entry">Entry fees</button>
+                <button class="tab" data-filter="task">Tasks</button>
+                <button class="tab" data-filter="shared">Shared</button>
+                <button class="tab" data-filter="dev">Developer</button>
+            </div>
+            <div id="history-list" class="list">
+                <p class="empty">Loading...</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ================= VOICE CHAT: remote audio streams are attached here ================= -->
+    <div id="voice-audio-sink" aria-hidden="true"
+        style="position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden"></div>
+
+    <!-- ================= TOASTS ================= -->
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+    <!-- ================= POPUPS (shared style) ================= -->
+    <div id="ticket-popup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>Select ticket</h3>
+            <div id="ticket-options" class="ticket-options"></div>
+            <button id="popup-close" class="btn-outline">Cancel</button>
+        </div>
+    </div>
+
+    <div id="leave-popup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>Leave this room?</h3>
+            <p class="popup-sub" id="leave-popup-sub">Your entry fee is not refunded.</p>
+            <div class="popup-actions">
+                <button id="leave-cancel" class="btn-outline">Cancel</button>
+                <button id="leave-confirm" class="btn-danger">Leave</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="members-popup" class="popup-overlay">
+        <div class="popup-box popup-wide">
+            <h3>Members</h3>
+            <div id="voice-bar" class="voice-bar">
+                <span id="voice-status" class="voice-status">Mic is off</span>
+                <button id="voice-audio-unlock" class="btn-outline btn-sm hidden" type="button">Tap to enable
+                    audio</button>
+            </div>
+            <div id="members-list-container" class="members-container"></div>
+            <div class="members-summary">
+                <div class="summary-item">Total members: <span id="total-members">0</span></div>
+                <div class="summary-item">Total: 🪙 <span id="total-price">0</span></div>
+            </div>
+            <button id="members-close" class="btn-primary">Close</button>
+        </div>
+    </div>
+
+    <div id="admin-user-popup" class="popup-overlay">
+        <div class="popup-box popup-user">
+            <button id="au-close" class="popup-x" type="button" aria-label="Close">&times;</button>
+            <h3 id="au-name">User</h3>
+            <p class="popup-sub" id="au-meta"></p>
+            <label class="au-label" for="au-alias">Friend alias</label>
+            <div class="alias-row">
+                <input id="au-alias" placeholder="Set a friend alias" maxlength="30" autocomplete="off">
+                <button id="au-alias-save" class="btn-primary btn-sm" type="button">Save</button>
+            </div>
+            <details id="au-history" class="au-history">
+                <summary class="au-toggle"><span>User history</span><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></summary>
+                <div id="au-ledger" class="list"></div>
+            </details>
+            <button id="au-delete" class="btn-danger" type="button">Delete user</button>
+        </div>
+    </div>
+
+    <div id="delete-popup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>Delete account?</h3>
+            <p class="popup-sub">This permanently removes your coins, history, stats, tickets and any rooms you host. It
+                cannot be undone.</p>
+            <div class="popup-actions">
+                <button id="delete-cancel" class="btn-outline">Cancel</button>
+                <button id="delete-confirm" class="btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reconnect-overlay" class="popup-overlay">
+        <div class="popup-box">
+            <span class="spinner" style="width:28px;height:28px;margin:0 auto;"></span>
+            <h3 id="reconnect-title">Reconnecting...</h3>
+            <p id="reconnect-sub" class="popup-sub">Restoring your room and tickets</p>
+        </div>
+    </div>
+
+    <!-- ================= 5. RESULT / WIN SCREEN ================= -->
+    <div id="win-screen" class="win-overlay">
+        <div class="confetti-container"></div>
+        <div class="win-box">
+            <h1>🎉 Congratulations 🎉</h1>
+            <p id="win-text">You won the game!</p>
+            <div class="win-stats">
+                <div><b id="win-coins">+0</b><small>Coins</small></div>
+                <div><b id="win-bonus">+0</b><small>Winning bonus</small></div>
+            </div>
+            <div class="popup-actions">
+                <button id="win-again" class="btn-outline">Play again</button>
+                <button id="win-home" class="btn-primary">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DEVELOPER GAME RESULT ================= -->
+    <div id="devresult-screen" class="win-overlay">
+        <div class="win-box dev-result-box">
+            <h1 id="devresult-title">🎮 Game Complete</h1>
+            <p id="devresult-sub">Here's how it went.</p>
+            <div class="devresult-balances">
+                <div><small id="devresult-dev-label">Developer</small><b id="devresult-dev-coins">0</b></div>
+                <div><small id="devresult-opp-label">You</small><b id="devresult-opp-coins">0</b></div>
+            </div>
+            <div class="devresult-pot"><small>Total coins</small><b id="devresult-pot">0</b></div>
+            <div id="devresult-prizes" class="list devresult-prizes"></div>
+            <small id="devresult-tx" class="live-note"></small>
+            <div class="popup-actions">
+                <button id="devresult-again" class="btn-outline">Play Again</button>
+                <button id="devresult-home" class="btn-primary">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script defer src="script.js?v=54"></script>
+
+</body>
+
+</html>
