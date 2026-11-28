@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#020617">
+    <title>Housie Multiplayer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=68">
+
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+</head>
+
+<body>
+
+    <!-- ================= ICON SPRITE (use with <svg class="ico"><use href="#i-name"/></svg>) ================= -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <symbol id="i-home" viewBox="0 0 24 24">
+                <path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-gift" viewBox="0 0 24 24">
+                <path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8c-3 0-5-1-5-3s3-2 5 3c2-5 5-5 5-3s-2 3-5 3z" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-play" viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-chart" viewBox="0 0 24 24">
+                <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-user" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M4 21c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-invite" viewBox="0 0 24 24">
+                <circle cx="9" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M2 21c0-4 3-6 7-6s7 2 7 6" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+                <path d="M19 8v6M16 11h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-back" viewBox="0 0 24 24">
+                <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-copy" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M5 15V5a1 1 0 0 1 1-1h10" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-share" viewBox="0 0 24 24">
+                <circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M8.6 10.7l6.8-4.4M8.6 13.3l6.8 4.4" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-more" viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="1.8" fill="currentColor" />
+                <circle cx="12" cy="12" r="1.8" fill="currentColor" />
+                <circle cx="12" cy="19" r="1.8" fill="currentColor" />
+            </symbol>
+            <symbol id="i-chev" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-arrow-right" viewBox="0 0 24 24">
+                <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-pause" viewBox="0 0 24 24">
+                <rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor" />
+                <rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor" />
+            </symbol>
+            <symbol id="i-trophy" viewBox="0 0 24 24">
+                <path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4v2a3 3 0 0 0 4 3M16 6h4v2a3 3 0 0 1-4 3M12 14v4M8 21h8"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-swap" viewBox="0 0 24 24">
+                <path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-clock" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-help" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-logout" viewBox="0 0 24 24">
+                <path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-spark" viewBox="0 0 24 24">
+                <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-palette" viewBox="0 0 24 24">
+                <path
+                    d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2z"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                <circle cx="7.5" cy="11" r="1.2" fill="currentColor" />
+                <circle cx="11" cy="7" r="1.2" fill="currentColor" />
+                <circle cx="16" cy="8" r="1.2" fill="currentColor" />
+            </symbol>
+            <symbol id="i-edit" viewBox="0 0 24 24">
+                <path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-sound" viewBox="0 0 24 24">
+                <path d="M4 9v6h4l5 4V5L8 9z M16.5 8.5a5 5 0 0 1 0 7 M19 6a8.5 8.5 0 0 1 0 12" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-mic" viewBox="0 0 24 24">
+                <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" />
+            </symbol>
+            <symbol id="i-star" viewBox="0 0 24 24">
+                <path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </symbol>
+            <symbol id="i-trash" viewBox="0 0 24 24">
+                <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- ================= TOP NAV ================= -->
+    <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Main">
+        <button class="nav-item active" data-open="home"><svg class="ico">
+                <use href="#i-home" />
+            </svg><span>Home</span></button>
+        <button class="nav-item" data-open="earn"><svg class="ico">
+                <use href="#i-gift" />
+            </svg><span>Tasks</span><i class="nav-badge" data-badge="earn" aria-hidden="true"></i></button>
+        <button class="nav-item" data-open="stats"><svg class="ico">
+                <use href="#i-chart" />
+            </svg><span>Analytics</span></button>
+        <button class="nav-item" data-open="profile"><svg class="ico">
+                <use href="#i-user" />
+            </svg><span>Profile</span><i class="nav-badge" data-badge="updates" aria-hidden="true"></i></button>
+    </nav>
+
+    <div class="app-container">
+
+        <!-- ================= 1. WELCOME ================= -->
+        <section id="screen-welcome" class="view active">
+            <div class="welcome-wrap">
+                <div class="logo-mark" aria-hidden="true">H</div>
+                <h1 class="glow-text">Housie</h1>
+
+                <button id="btn-google" type="button" class="btn-outline btn-google">
+                    <svg class="google-icon" viewBox="0 0 48 48" width="18" height="18" aria-hidden="true">
+                        <path fill="#FFC107"
+                            d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+                        <path fill="#FF3D00"
+                            d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+                        <path fill="#4CAF50"
+                            d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+                        <path fill="#1976D2"
+                            d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+                    </svg>
+                    <span id="btn-google-text">Sign in with Google</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= 2. HOME ================= -->
+        <section id="screen-home" class="view">
+
+            <header class="app-header">
+                <div class="who">
+                    <div id="home-avatar" class="avatar" aria-hidden="true">P</div>
+                    <div>
+                        <small id="home-greeting">Welcome back</small>
+                        <strong id="home-name">Player</strong>
+                    </div>
+                </div>
+                <div class="coin-chip" title="Your coins">🪙 <b data-coin>--</b></div>
+            </header>
+
+            <!-- Daily bonus -->
+            <div class="card bonus-banner">
+                <div>
+                    <h4>Daily bonus</h4>
+                    <p class="bonus-line hidden" data-timer-only></p>
+                    <p id="bonus-text" class="hidden">Claim your coins for today.</p>
+                    <div id="streak-dots" class="streak-dots hidden" aria-label="7 day streak"></div>
+                </div>
+                <button id="btn-claim-bonus" class="btn-primary btn-sm">Claim</button>
+            </div>
+
+            <!-- Resume -->
+            <div id="resume-card" class="card resume-card hidden">
+                <div>
+                    <h4>Game in progress</h4>
+                    <p>Room <b id="resume-room">----</b></p>
+                </div>
+                <button id="btn-resume" class="btn-primary btn-sm">Rejoin</button>
+            </div>
+
+            <!-- Primary actions -->
+            <div class="action-grid">
+                <button id="home-create" class="card action-card" data-open="lobby" data-tab="create">
+                    <svg class="ico">
+                        <use href="#i-play" />
+                    </svg>
+                    <strong>Create room</strong>
+                    <small>Host a game</small>
+                </button>
+                <button id="home-join" class="card action-card" data-open="lobby" data-tab="join">
+                    <svg class="ico">
+                        <use href="#i-user" />
+                    </svg>
+                    <strong>Join with code</strong>
+                    <small>Enter a room code</small>
+                </button>
+            </div>
+
+            <!-- Share coins + Play with Developer + History -->
+            <div class="action-grid">
+                <button id="home-share-card" class="card action-card card-share" data-open="share" type="button">
+                    <svg class="ico">
+                        <use href="#i-gift" />
+                    </svg>
+                    <strong>Share coins</strong>
+                    <small>Share coins with your friends</small>
+                </button>
+                <!-- Play with Developer (hidden until the developer account is found) -->
+                <button id="home-dev-card" class="card action-card card-dev hidden" data-open="devlobby" type="button">
+                    <svg class="ico">
+                        <use href="#i-spark" />
+                    </svg>
+                    <span id="dev-card-avatar" class="hidden">D</span>
+                    <strong>Play with Developer</strong>
+                    <small><span id="dev-card-name">Developer</span> · 🪙 <b id="dev-card-coins">--</b></small>
+                    <small class="dev-card-cta-line hidden"><span id="dev-card-cta"></span></small>
+                </button>
+            </div>
+
+            <div id="home-tasks" class="hidden"></div>
+
+
+            <div id="recent-sessions" class="hidden"></div>
+        </section>
+
+        <!-- ================= 3. ROOM SETUP (Create | Join) ================= -->
+        <section id="screen-lobby" class="view">
+
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2 id="lobby-title">Create room</h2>
+                <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+            </header>
+
+            <div class="tabs hidden" role="tablist" id="lobby-tabs">
+                <button class="tab active" data-tab="create" role="tab">Create</button>
+                <button class="tab" data-tab="join" role="tab">Join</button>
+            </div>
+
+            <!-- Create panel -->
+            <div class="card form-card tab-panel active" data-panel="create">
+                <div id="lobby-shared" class="lobby-shared">
+                    <label for="username">Your name</label>
+                    <div class="field-row name-field">
+                        <input id="username" class="in-name" placeholder="Enter your name" maxlength="30"
+                            autocomplete="off" autocorrect="off" spellcheck="false" readonly>
+                        <button id="username-edit" class="field-edit" type="button" aria-label="Edit name"><svg
+                                class="ico">
+                                <use href="#i-edit" />
+                            </svg><span>Edit</span></button>
+                    </div>
+
+                    <label for="ticket-count">Tickets</label>
+                    <div class="stepper">
+                        <button type="button" id="tk-minus" aria-label="Fewer tickets">−</button>
+                        <input id="ticket-count" type="tel" value="1" placeholder="1 - 4" readonly>
+                        <button type="button" id="tk-plus" aria-label="More tickets">+</button>
+                    </div>
+                </div>
+
+                <label for="ticket-price">Ticket price (coins)</label>
+                <div class="chips" id="price-chips">
+                    <button type="button" class="chip" data-price="10">10</button>
+                    <button type="button" class="chip" data-price="25">25</button>
+                    <button type="button" class="chip" data-price="50">50</button>
+                    <button type="button" class="chip" data-price="100">100</button>
+                </div>
+                <input id="ticket-price" class="in-coins" type="tel" value="" placeholder="Enter price (0 - 5000 coins)"
+                    inputmode="numeric" autocomplete="off">
+
+                <div class="cost-line">You pay <b id="cost-total">10</b> coins to start</div>
+                <p id="low-balance" class="notice hidden">You need <b id="low-need">0</b> more coins. <button
+                        class="link-btn" data-open="earn">Earn coins</button></p>
+
+                <button id="btn-create" class="btn-primary">Create room</button>
+            </div>
+
+            <!-- Join panel -->
+            <div class="card form-card tab-panel" data-panel="join">
+                <label for="join-id">Room code</label>
+                <input id="join-id" class="in-code" placeholder="Enter room code" autocapitalize="characters"
+                    autocomplete="off">
+
+                <div id="room-preview" class="room-preview hidden">
+                    <div><small>Host</small><b id="rp-host">--</b></div>
+                    <div><small>Ticket</small><b id="rp-price">--</b></div>
+                    <div><small>Players</small><b id="rp-players">--</b></div>
+                </div>
+
+                <button id="btn-join" class="btn-primary">Join room</button>
+            </div>
+        </section>
+
+        <!-- ================= DEVELOPER LOBBY ================= -->
+        <section id="screen-devlobby" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Play with Developer</h2>
+                <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+            </header>
+
+            <div class="card dev-vs-card">
+                <div class="dev-vs-row">
+                    <div class="dev-vs-side">
+                        <div id="devlobby-avatar" class="avatar" aria-hidden="true">D</div>
+                        <strong id="devlobby-name">Developer</strong>
+                        <span class="auto-badge">⚡ Auto-Play Opponent</span>
+                        <small>🪙 <b id="devlobby-dev-coins">--</b></small>
+                    </div>
+                    <span class="dev-vs-x">VS</span>
+                    <div class="dev-vs-side">
+                        <div id="devlobby-my-avatar" class="avatar" aria-hidden="true">P</div>
+                        <strong id="devlobby-my-name">You</strong>
+                        <small>🪙 <b data-coin>--</b></small>
+                    </div>
+                </div>
+                <p class="dev-vs-note">The developer's ticket marks itself and claims prizes the instant a number is
+                    called — it never misses and never waits. Think of it as a tough, always-sharp opponent rather
+                    than a fair coin flip.</p>
+            </div>
+
+            <div class="card form-card">
+                <label for="devlobby-tickets">Tickets</label>
+                <div class="stepper">
+                    <button type="button" id="devtk-minus" aria-label="Fewer tickets">−</button>
+                    <input id="devlobby-tickets" type="tel" value="1" placeholder="1 - 4" readonly>
+                    <button type="button" id="devtk-plus" aria-label="More tickets">+</button>
+                </div>
+
+                <label for="dev-stake-chips">Game price (you and the developer each pay this)</label>
+                <div class="chips" id="dev-stake-chips">
+                    <button type="button" class="chip" data-stake="10">10</button>
+                    <button type="button" class="chip active" data-stake="25">25</button>
+                    <button type="button" class="chip" data-stake="50">50</button>
+                    <button type="button" class="chip" data-stake="100">100</button>
+                    <button type="button" class="chip" data-stake="500">500</button>
+                </div>
+
+                <div class="dev-pot-line">
+                    <div><small>You pay</small><b id="dev-pot-mine">25</b></div>
+                    <div><small>Developer pays</small><b id="dev-pot-dev">25</b></div>
+                    <div><small>Total coins</small><b id="dev-pot-total">50</b></div>
+                </div>
+                <p id="dev-low-balance" class="notice hidden">You need <b id="dev-low-need">0</b> more coins. <button
+                        class="link-btn" data-open="earn">Earn coins</button></p>
+                <p id="dev-busy-notice" class="notice hidden">The developer is already in a challenge right now. Try
+                    again shortly.</p>
+
+                <button id="btn-dev-start" class="btn-primary">Start Game</button>
+            </div>
+        </section>
+
+        <!-- ================= 4. GAME ARENA ================= -->
+        <section id="screen-arena" class="view">
+
+            <!-- Sticky top: bar + reserved empty slot where toasts (number drawn etc.) show, so they never cover tickets -->
+            <div class="arena-top">
+                <div class="top-bar arena-head">
+                    <div class="room-info">
+                        <span id="arena-room-badge" class="badge"><span class="lbl">Room</span> <b
+                                id="display-room-id">----</b></span>
+                        <span id="arena-dev-badge" class="badge dev-badge hidden">⚡ Auto-Play Opponent</span>
+                    </div>
+                    <div class="game-controls">
+                        <div id="current-number">--</div>
+                        <button id="btn-draw" class="btn-primary">Generate Number</button>
+                    </div>
+                    <div class="top-right">
+                        <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+                        <div class="menu-wrap">
+                            <button id="btn-menu" class="icon-btn" aria-label="Menu" aria-expanded="false"><svg
+                                    class="ico">
+                                    <use href="#i-more" />
+                                </svg></button>
+                            <div id="menu-dropdown" class="dropdown hidden">
+                                <div id="auto-menu" class="auto-menu hidden">
+                                    <button type="button" id="auto-head" class="dropdown-item auto-head"
+                                        aria-expanded="false" aria-controls="auto-panel">
+                                        <span class="auto-label"><b>Auto generate</b><small
+                                                id="auto-sub">Off</small></span>
+                                        <svg class="ico chev" aria-hidden="true">
+                                            <use href="#i-chev" />
+                                        </svg>
+                                    </button>
+                                    <div id="auto-panel" class="auto-panel hidden">
+                                        <label class="auto-row" for="auto-toggle"><span>Auto generate</span>
+                                            <input type="checkbox" id="auto-toggle" class="switch"
+                                                aria-label="Auto generate numbers">
+                                        </label>
+                                        <div class="auto-speed" role="group" aria-label="Seconds between numbers">
+                                            <button type="button" data-sec="1">1 sec</button>
+                                            <button type="button" data-sec="2">2 sec</button>
+                                            <button type="button" data-sec="3">3 sec</button>
+                                            <button type="button" data-sec="4">4 sec</button>
+                                            <button type="button" data-sec="5">5 sec</button>
+                                            <button type="button" data-sec="8">8 sec</button>
+                                        </div>
+                                        <button type="button" class="menu-close" data-close-panel>Close</button>
+                                    </div>
+                                </div>
+                                <div id="members-menu" class="auto-menu">
+                                    <button type="button" id="btn-members" class="dropdown-item auto-head"
+                                        aria-expanded="false" aria-controls="members-panel">
+                                        <span class="auto-label"><b>Members</b><small id="members-sub">0
+                                                players</small></span>
+                                        <svg class="ico chev" aria-hidden="true">
+                                            <use href="#i-chev" />
+                                        </svg>
+                                    </button>
+                                    <div id="members-panel" class="auto-panel hidden">
+                                        <div id="members-list-container" class="members-container"></div>
+                                        <div class="members-summary">
+                                            <div class="summary-item">Total members: <span id="total-members">0</span>
+                                            </div>
+                                            <div class="summary-item">Total: 🪙 <span id="total-price">0</span></div>
+                                        </div>
+                                        <button type="button" class="menu-close" data-close-panel>Close</button>
+                                    </div>
+                                </div>
+                                <div id="vol-menu" class="auto-menu">
+                                    <button type="button" id="vol-head" class="dropdown-item auto-head"
+                                        aria-expanded="false" aria-controls="vol-panel">
+                                        <span class="auto-label"><b>Adjust volume</b><small id="vol-sub">Music on ·
+                                                Voice on</small></span>
+                                        <svg class="ico chev" aria-hidden="true">
+                                            <use href="#i-chev" />
+                                        </svg>
+                                    </button>
+                                    <div id="vol-panel" class="auto-panel hidden">
+                                        <label class="auto-row" for="vol-music"><span>Music</span>
+                                            <input type="checkbox" id="vol-music" class="switch"
+                                                aria-label="Background music"></label>
+                                        <label class="auto-row" for="vol-voice"><span>Number reading</span>
+                                            <input type="checkbox" id="vol-voice" class="switch"
+                                                aria-label="Read numbers aloud"></label>
+                                        <div class="vol-slider-row">
+                                            <span>Volume</span>
+                                            <input type="range" id="vol-range" min="0" max="100" step="5" value="60"
+                                                aria-label="Volume">
+                                            <b id="vol-pct">60%</b>
+                                        </div>
+                                        <button type="button" class="menu-close" data-close-panel>Close</button>
+                                    </div>
+                                </div>
+                                <button id="btn-leave" class="dropdown-item danger">Leave room</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="arena-toast-slot" aria-live="polite"></div>
+            </div>
+
+            <!-- Tickets -->
+            <div class="tickets-section">
+                <div id="tickets-container" class="tickets-container"></div>
+            </div>
+
+            <!-- Called numbers (after tickets) -->
+            <div class="card">
+                <h4>Called numbers</h4>
+                <div id="called-grid" class="mini-grid"></div>
+            </div>
+
+            <!-- Last 5 (after called numbers) -->
+            <div class="card last-numbers">
+                <small>Last 5</small>
+                <div id="called-history-list"></div>
+            </div>
+
+            <!-- Prizes -->
+            <div class="card">
+                <h4>Prizes <span id="prize-pot" class="prize-pot"></span></h4>
+                <div id="prize-list" class="prize-list"></div>
+            </div>
+
+            <!-- Sticky claim bar -->
+            <div class="claim-bar">
+                <div class="claims-buttons">
+                    <button class="claim-btn" data-claim="jaldi">Jaldi</button>
+                    <button class="claim-btn" data-claim="line1">1st Line</button>
+                    <button class="claim-btn" data-claim="line2">2nd Line</button>
+                    <button class="claim-btn" data-claim="line3">3rd Line</button>
+                    <button class="claim-btn" data-claim="housie">Housie</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. EARN ================= -->
+        <section id="screen-earn" class="view">
+            <header class="page-head">
+                <h2>Earn coins</h2>
+                <button class="icon-btn edit-btn" type="button" data-open="history" data-filter="task"
+                    aria-label="Reward history"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg><span>History</span></button>
+                <span class="coin-chip sm">🪙 <b data-coin>--</b></span>
+            </header>
+
+            <div class="card bonus-banner">
+                <div>
+                    <h4>Daily bonus</h4>
+                    <p class="bonus-line">Get 1000 coins every day</p>
+                    <p id="earn-streak-text" class="hidden">Come back every day for a bigger reward.</p>
+                    <div id="earn-streak-dots" class="streak-dots hidden"></div>
+                </div>
+                <button id="earn-claim" class="btn-primary btn-sm">Claim</button>
+            </div>
+
+            <div id="refill-card" class="card resume-card hidden">
+                <div>
+                    <h4>Free refill</h4>
+                    <p>Low on coins? Get 30 coins, once a day.</p>
+                </div>
+                <button id="btn-refill" class="btn-primary btn-sm">Get 30</button>
+            </div>
+
+            <div class="card lucky-card">
+                <div>
+                    <h4>Try your luck</h4>
+                    <p id="wheel-text">Spin every hour. Win 1,000 to 10,000 coins, and a 25,000 jackpot once a day.</p>
+                </div>
+                <button id="btn-spin" class="btn-primary btn-sm">Spin</button>
+            </div>
+
+            <div class="tabs" id="task-tabs">
+                <button class="tab active" data-tab="daily">Daily<span class="tab-count"
+                        data-count="daily"></span></button>
+                <button class="tab" data-tab="weekly">Weekly<span class="tab-count" data-count="weekly"></span></button>
+                <button class="tab" data-tab="monthly">Monthly<span class="tab-count"
+                        data-count="monthly"></span></button>
+            </div>
+
+            <div class="tab-panel active" data-panel="daily">
+                <div class="set-timer" style="margin-top:var(--s3)"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>Refreshes in <b class="set-reset" data-set="daily">--</b>
+                    <button class="icon-btn edit-btn" type="button" data-share="tasks:daily" style="margin-left:auto"
+                        aria-label="Share daily tasks"><svg class="ico">
+                            <use href="#i-share" />
+                        </svg><span>Share</span></button>
+                </div>
+                <div id="tasks-daily" class="list" style="margin-top:var(--s2)"></div>
+            </div>
+
+            <div class="tab-panel" data-panel="weekly">
+                <div class="set-timer" style="margin-top:var(--s3)"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>Refreshes in <b class="set-reset" data-set="weekly">--</b>
+                    <button class="icon-btn edit-btn" type="button" data-share="tasks:weekly" style="margin-left:auto"
+                        aria-label="Share weekly tasks"><svg class="ico">
+                            <use href="#i-share" />
+                        </svg><span>Share</span></button>
+                </div>
+                <div id="tasks-weekly" class="list" style="margin-top:var(--s2)"></div>
+            </div>
+
+            <div class="tab-panel" data-panel="monthly">
+                <div class="set-timer" style="margin-top:var(--s3)"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>Refreshes in <b class="set-reset" data-set="monthly">--</b>
+                    <button class="icon-btn edit-btn" type="button" data-share="tasks:monthly" style="margin-left:auto"
+                        aria-label="Share monthly tasks"><svg class="ico">
+                            <use href="#i-share" />
+                        </svg><span>Share</span></button>
+                </div>
+                <div id="tasks-monthly" class="list" style="margin-top:var(--s2)"></div>
+            </div>
+
+            <div id="tasks-once" class="hidden"></div>
+        </section>
+
+        <!-- ================= 7. PROFILE ================= -->
+        <section id="screen-profile" class="view">
+            <div class="card profile-card">
+                <div id="profile-avatar" class="avatar lg" aria-hidden="true">P</div>
+                <div class="profile-main">
+                    <div class="name-row">
+                        <input id="profile-name" class="inline-input" placeholder="Display name" maxlength="30"
+                            readonly>
+                        <button id="profile-edit" class="icon-btn edit-btn" type="button" aria-label="Edit name"><svg
+                                class="ico">
+                                <use href="#i-edit" />
+                            </svg><span>Edit</span></button>
+                    </div>
+                    <small id="profile-email">--</small>
+                    <small id="profile-joined" class="hidden"></small>
+                </div>
+            </div>
+
+            <div class="invite-box">
+                <span class="invite-glow" aria-hidden="true"></span>
+                <div class="invite-box-top">
+                    <span class="invite-gem" aria-hidden="true">🎁</span>
+                    <div class="invite-box-text">
+                        <small class="invite-kicker">Friend invite reward</small>
+                        <h4>Invite friends</h4>
+                        <p>Earn <b>🪙 50,000</b> when each friend completes all welcome tasks</p>
+                    </div>
+                </div>
+                <button class="invite-cta" type="button" data-open="invite" data-new="invite"><svg class="ico">
+                        <use href="#i-invite" />
+                    </svg><span>Invite friends</span><svg class="ico invite-cta-arrow" aria-hidden="true">
+                        <use href="#i-arrow-right" />
+                    </svg></button>
+            </div>
+
+            <div class="card menu-list">
+                <button class="menu-row" data-open="history"><svg class="ico">
+                        <use href="#i-clock" />
+                    </svg>History</button>
+                <button class="menu-row" data-open="transactions"><svg class="ico">
+                        <use href="#i-swap" />
+                    </svg>Transactions</button>
+                <button class="menu-row" data-open="updates"><svg class="ico">
+                        <use href="#i-spark" />
+                    </svg>Updates<i class="dot-new" aria-hidden="true"></i></button>
+                <button class="menu-row" data-open="leaderboard"><svg class="ico">
+                        <use href="#i-trophy" />
+                    </svg>Leaderboard</button>
+                <button class="menu-row" data-open="theme"><svg class="ico">
+                        <use href="#i-palette" />
+                    </svg>Ticket theme</button>
+                <button class="menu-row" data-open="favorites"><svg class="ico">
+                        <use href="#i-star" />
+                    </svg>Favorite Numbers</button>
+                <button class="menu-row" data-open="wincards"><svg class="ico">
+                        <use href="#i-trophy" />
+                    </svg>Winning Cards</button>
+                <button class="menu-row" data-open="sounds"><svg class="ico">
+                        <use href="#i-sound" />
+                    </svg>Sound &amp; effects</button>
+            </div>
+
+            <button id="profile-admin" class="btn-outline signout-btn hidden" type="button" data-open="admin"><svg
+                    class="ico">
+                    <use href="#i-trophy" />
+                </svg>Admin dashboard</button>
+
+            <button id="profile-delete" class="btn-outline signout-btn delete-btn" type="button"><svg class="ico">
+                    <use href="#i-trash" />
+                </svg>Delete account</button>
+
+            <button id="profile-signout" class="btn-danger signout-btn" type="button"><svg class="ico">
+                    <use href="#i-logout" />
+                </svg>Sign out</button>
+        </section>
+
+        <!-- ================= 8. STATS ================= -->
+        <section id="screen-stats" class="view">
+            <header class="page-head">
+                <h2>Your analytics</h2>
+                <button class="icon-btn edit-btn" type="button" data-share="stats" aria-label="Share your stats"><svg
+                        class="ico">
+                        <use href="#i-share" />
+                    </svg><span>Share</span></button>
+            </header>
+
+            <div class="stat-grid">
+                <div class="stat"><b id="st-games">0</b><small>Games played</small></div>
+                <div class="stat"><b id="st-wins">0</b><small>Wins</small></div>
+                <div class="stat"><b id="st-winrate">0%</b><small>Win rate</small></div>
+                <div class="stat hidden"><b id="st-net">0</b><small>Net coins</small></div>
+                <div class="stat"><b id="st-hosted">0</b><small>Rooms hosted</small></div>
+            </div>
+
+            <div class="card chart-card hidden">
+                <div class="section-head">
+                    <h4>Coins over time</h4>
+                    <div class="tabs mini" id="range-tabs">
+                        <button class="tab active" data-range="7">7d</button>
+                        <button class="tab" data-range="30">30d</button>
+                        <button class="tab" data-range="all">All</button>
+                    </div>
+                </div>
+                <div id="chart-coins" class="chart" role="img" aria-label="Coins over time"></div>
+            </div>
+
+            <div class="card chart-card">
+                <h4>Prizes won</h4>
+                <div id="chart-prizes" class="chart" role="img" aria-label="Prizes won by type"></div>
+            </div>
+
+            <div class="card insight">
+                <p id="st-insight">Play a few games to see insights here.</p>
+            </div>
+        </section>
+
+        <!-- ================= UPDATES (add new dated groups at the top) ================= -->
+        <section id="screen-updates" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Updates</h2>
+                <span></span>
+            </header>
+
+            <h4 class="upd-date"><span>Today · 28 Nov 2026</span><span class="upd-count">1 update</span></h4>
+            <div class="list upd-list">
+                <div class="card upd-item" data-upd-id="upd-2026-11-28-1">
+                    <div><b>Invite friends</b>
+                        <small>Profile now has Invite friends. Copy your 6-digit invite code and the website link, and send them to your friends.
+                            When a new player creates an account they can enter your code and see who invited them.
+                            A friend who joins with your code earns you 50,000 coins to claim in Invite friends, and the new player gets 25,000 in Welcome tasks.</small></div>
+                    <div class="upd-actions">
+                        <button class="btn-outline btn-sm mark-read-btn" type="button"
+                            data-mark-read="upd-2026-11-28-1">Mark as read</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ================= 9. LEADERBOARD ================= -->
+        <section id="screen-leaderboard" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Housie Players</h2>
+                <button class="icon-btn edit-btn" type="button" data-share="leaderboard"
+                    aria-label="Share leaderboard"><svg class="ico">
+                        <use href="#i-share" />
+                    </svg><span>Share</span></button>
+            </header>
+            <div id="lb-list" class="list"></div>
+        </section>
+
+        <!-- ================= ADMIN DASHBOARD (owner only) ================= -->
+        <section id="screen-admin" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Admin dashboard</h2>
+                <span></span>
+            </header>
+            <div class="tabs scroll-x" id="admin-tabs">
+                <button class="tab active" data-tab="a-overview">Overview</button>
+                <button class="tab" data-tab="a-users">Users</button>
+                <button class="tab" data-tab="a-rooms">Rooms</button>
+                <button class="tab" data-tab="a-tx">Transactions</button>
+                <button class="tab" data-tab="a-fav">Fav numbers</button>
+            </div>
+
+            <div class="tab-panel active" data-panel="a-overview">
+                <div id="admin-stats" class="list"></div>
+                <button id="admin-backup-export" class="btn-outline signout-btn" type="button"><svg class="ico">
+                        <use href="#i-copy" />
+                    </svg>Export data</button>
+                <button id="admin-backup-import" class="btn-outline signout-btn" type="button"><svg class="ico">
+                        <use href="#i-copy" />
+                    </svg>Import data</button>
+                <input id="admin-backup-file" type="file" accept="application/json,.json" hidden>
+            </div>
+
+            <div class="tab-panel" data-panel="a-users">
+                <div class="search-box">
+                    <svg class="search-ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="20" y1="20" x2="16.5" y2="16.5"></line>
+                    </svg>
+                    <input id="admin-search" type="search" placeholder="Search by name or ID" autocomplete="off"
+                        aria-label="Search users by name or ID">
+                    <button id="admin-search-clear" class="search-clear hidden" type="button"
+                        aria-label="Clear search">&times;</button>
+                </div>
+                <div class="chips" id="admin-user-filters">
+                    <button type="button" class="chip active" data-f="all">All</button>
+                    <button type="button" class="chip" data-f="ingame">In a game</button>
+                    <button type="button" class="chip" data-f="name">A-Z</button>
+                </div>
+                <div class="admin-bulk">
+                    <button id="admin-users-releaseall" class="btn-outline btn-sm" type="button" disabled>Release all
+                        in-game</button>
+                </div>
+                <div id="admin-list" class="list">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="a-rooms">
+                <div class="chips" id="admin-room-filters">
+                    <button type="button" class="chip active" data-f="live">Live</button>
+                    <button type="button" class="chip" data-f="all">All recent</button>
+                </div>
+                <div class="admin-bulk">
+                    <button id="admin-rooms-endall" class="btn-outline btn-sm" type="button" disabled>End all
+                        live</button>
+                    <button id="admin-rooms-cleanall" class="btn-outline btn-sm" type="button" disabled>Clean finished
+                        data</button>
+                    <button id="admin-rooms-delall" class="btn-danger btn-sm" type="button" disabled>Delete all</button>
+                </div>
+                <div id="admin-rooms" class="list">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="a-fav">
+                <div id="admin-fav-list" class="list admin-fav">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="a-tx">
+                <div class="chips" id="admin-tx-filters"></div>
+                <div id="admin-tx-list" class="list">
+                    <p class="empty">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SHARE COINS ================= -->
+        <section id="screen-share" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="home" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Share coins</h2>
+                <span></span>
+            </header>
+
+            <div class="card share-card">
+                <small>Your 4-digit code</small>
+                <div class="share-code-row">
+                    <b id="share-code">--</b>
+                    <button id="share-copy" class="btn-outline btn-sm" type="button">Copy</button>
+                </div>
+                <small>Share this code with friends so they can send you coins.</small>
+
+                <button id="friends-toggle" class="btn-outline friends-toggle" type="button" aria-expanded="false"
+                    aria-controls="friends-panel">
+                    <span>See your friends' codes</span><span class="chev" aria-hidden="true">▾</span>
+                </button>
+                <div id="friends-panel" class="friends-panel hidden">
+                    <div id="friends-list" class="friends-list"></div>
+                </div>
+            </div>
+
+            <div class="card share-card">
+                <label class="au-label" for="share-to">Friend's code</label>
+                <input id="share-to" class="share-input" type="text" inputmode="numeric" pattern="[0-9]*"
+                    placeholder="4-digit code" autocomplete="off" maxlength="4">
+
+                <label class="au-label" for="share-amount">Amount</label>
+                <div class="chips" id="share-amounts">
+                    <button type="button" class="chip" data-a="50">50</button>
+                    <button type="button" class="chip" data-a="100">100</button>
+                    <button type="button" class="chip" data-a="200">200</button>
+                    <button type="button" class="chip" data-a="500">500</button>
+                </div>
+                <input id="share-amount" class="share-input" type="number" inputmode="numeric" min="1"
+                    placeholder="Or type any amount">
+
+                <button id="share-send" class="btn-primary signout-btn" type="button">Send coins</button>
+            </div>
+        </section>
+
+        <!-- ================= INVITE FRIENDS ================= -->
+        <section id="screen-invite" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Invite friends</h2>
+                <span></span>
+            </header>
+
+            <div class="card inv-hero">
+                <span class="invite-glow" aria-hidden="true"></span>
+                <div class="inv-badge" aria-hidden="true">🎉</div>
+                <small class="invite-kicker">Friend invite reward</small>
+                <h3>Invite your friends and earn a reward of 50k</h3>
+                <p>Copy your code and send it to friends, so your friend gets a 25k joining bonus reward.</p>
+            </div>
+
+            <div class="card inv-card">
+                <div class="inv-label">Your invite code</div>
+                <div class="inv-copy-row">
+                    <div id="invite-code" class="inv-code" aria-live="polite"><i>-</i><i>-</i><i>-</i><i>-</i><i>-</i><i>-</i></div>
+                    <button id="invite-code-copy" class="inv-copy-code" type="button"><svg class="ico">
+                        <use href="#i-copy" />
+                    </svg><span>Copy code</span></button>
+                </div>
+
+                <button id="invite-copy" class="btn-primary signout-btn" type="button"><svg class="ico">
+                        <use href="#i-copy" />
+                    </svg><span>Copy website link</span></button>
+            </div>
+
+            <div id="invfriends-section" class="card newbie-card hidden">
+                <div class="newbie-head">
+                    <div class="newbie-title"><span aria-hidden="true">🤝</span>
+                        <div><h4>Friend invite reward</h4><small>You will get 50,000 coins when your friend completes all welcome tasks</small></div>
+                    </div>
+                    <div class="newbie-meta"><b id="invfriends-count">0/0 claimed</b></div>
+                </div>
+                <div class="inv-reward">
+                    <div><small id="invfriends-hint">Reward you have got</small></div>
+                    <button id="invfriends-claim" class="btn-primary" type="button" disabled>Claim</button>
+                </div>
+                <div class="inv-label">Invited friends</div>
+                <div id="invfriends-list" class="list"></div>
+            </div>
+
+            <div id="newbie-section" class="card newbie-card hidden">
+                <div class="newbie-head">
+                    <div class="newbie-title"><span aria-hidden="true">🎁</span>
+                        <div><h4>Welcome tasks</h4><small>Explore Housie, earn extra coins</small></div>
+                    </div>
+                    <div class="newbie-meta"><b id="newbie-count">0/0 claimed</b></div>
+                </div>
+                <div id="tasks-newbie" class="list"></div>
+            </div>
+        </section>
+
+        <!-- ================= TRANSACTIONS ================= -->
+        <section id="screen-transactions" class="view">
+            <header class="page-head">
+                <h2>Transactions</h2>
+            </header>
+
+            <div class="card tx-summary">
+                <small>Current balance</small>
+                <div class="tx-bal">🪙 <b id="tx-balance">0</b></div>
+                <div class="tx-bar"><i id="tx-bar-in"></i></div>
+                <div class="tx-io">
+                    <div><small>Money in</small><b id="tx-in" class="pos">+0</b></div>
+                    <div><small>Money out</small><b id="tx-out" class="neg">0</b></div>
+                    <div><small>Transactions</small><b id="tx-count">0</b></div>
+                </div>
+            </div>
+
+            <input id="tx-search" class="tx-search" type="search" placeholder="Search friend, ID or amount"
+                autocomplete="off">
+
+
+            <div id="tx-list" class="tx-list">
+                <p class="empty">Loading...</p>
+            </div>
+        </section>
+
+        <!-- ================= 10. HISTORY ================= -->
+        <section id="screen-history" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>History</h2>
+                <span></span>
+            </header>
+            <div class="tabs scroll-x" id="hist-filters">
+                <button class="tab active" data-filter="all">All</button>
+                <button class="tab" data-filter="prize">Wins</button>
+                <button class="tab" data-filter="entry">Entry fees</button>
+                <button class="tab" data-filter="task">Tasks</button>
+                <button class="tab" data-filter="shared">Shared</button>
+                <button class="tab" data-filter="dev">Developer</button>
+            </div>
+            <div id="history-list" class="list">
+                <p class="empty">Loading...</p>
+            </div>
+        </section>
+
+        <!-- ================= SOUND & EFFECTS ================= -->
+        <section id="screen-sounds" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Sound &amp; effects</h2>
+                <span></span>
+            </header>
+            <div class="card form-card fx-card">
+                <div class="fx-h">Customise</div>
+                <div class="theme-head">
+                    <label class="theme-title" for="fx-sound"><svg class="ico">
+                            <use href="#i-sound" />
+                        </svg>Game sounds</label>
+                    <input type="checkbox" id="fx-sound" class="switch" checked>
+                </div>
+                <div class="theme-head">
+                    <label class="theme-title" for="fx-voice"><svg class="ico">
+                            <use href="#i-mic" />
+                        </svg>Read numbers aloud</label>
+                    <input type="checkbox" id="fx-voice" class="switch" checked>
+                </div>
+                <div class="theme-head fx-vol-row">
+                    <label class="theme-title" for="fx-vol"><svg class="ico">
+                            <use href="#i-spark" />
+                        </svg>Volume</label>
+                    <input type="range" id="fx-vol" min="0" max="100" step="5" value="60">
+                </div>
+                <div class="fx-sec">Music</div>
+                <div class="theme-head">
+                    <label class="theme-title" for="fx-music-on">Play music</label>
+                    <input type="checkbox" id="fx-music-on" class="switch">
+                </div>
+                <div class="theme-head fx-vol-row">
+                    <label class="theme-title" for="fx-music-vol">Music volume</label>
+                    <input type="range" id="fx-music-vol" min="0" max="100" step="5" value="70">
+                </div>
+                <div class="theme-head fx-vol-row">
+                    <label class="theme-title" for="fx-music-tempo">Speed <b id="fx-music-tempo-v"
+                            class="fx-val">100%</b></label>
+                    <input type="range" id="fx-music-tempo" min="60" max="140" step="5" value="100">
+                </div>
+                <div class="theme-head fx-vol-row">
+                    <label class="theme-title" for="fx-music-key">Pitch <b id="fx-music-key-v"
+                            class="fx-val">0</b></label>
+                    <input type="range" id="fx-music-key" min="-6" max="6" step="1" value="0">
+                </div>
+                <div class="fx-sec">Instruments</div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-drums">Drums</label><input type="checkbox"
+                        id="fx-m-drums" class="switch" checked></div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-bass">Bass</label><input type="checkbox"
+                        id="fx-m-bass" class="switch" checked></div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-chords">Chords &amp; pads</label><input
+                        type="checkbox" id="fx-m-chords" class="switch" checked></div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-lead">Melody</label><input type="checkbox"
+                        id="fx-m-lead" class="switch" checked></div>
+                <div class="fx-sec">Behaviour</div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-duck">Lower music while numbers are
+                        read</label><input type="checkbox" id="fx-m-duck" class="switch" checked></div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-auto">Auto-play next track</label><input
+                        type="checkbox" id="fx-m-auto" class="switch"></div>
+                <div class="theme-head"><label class="theme-title" for="fx-m-game">Only during a game</label><input
+                        type="checkbox" id="fx-m-game" class="switch"></div>
+                <button id="fx-reset-music" class="btn-outline" type="button">Reset music settings</button>
+            </div>
+            <div class="card form-card fx-card" id="fx-music-card">
+                <div class="fx-h">Background music</div>
+                <p class="fx-sub">14 game tracks made live on your device. Tap a track to play it.</p>
+                <div id="fx-tracks" class="fx-tracks"></div>
+            </div>
+
+            <div class="card form-card fx-card">
+                <div class="fx-h">Sound packs</div>
+                <p class="fx-sub">Pick a style for every sound at once.</p>
+                <div id="fx-packs" class="fx-packs"></div>
+                <p id="fx-pack-note" class="fx-sub"></p>
+            </div>
+        </section>
+
+        <!-- ================= TICKET THEME ================= -->
+        <section id="screen-theme" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Ticket theme</h2>
+                <span></span>
+            </header>
+            <div class="card form-card">
+                <div class="theme-head">
+                    <label class="theme-title"><svg class="ico">
+                            <use href="#i-palette" />
+                        </svg>Ticket theme</label>
+                    <label class="switch-row" for="theme-random"><span>Random mix</span>
+                        <input type="checkbox" id="theme-random" class="switch" checked>
+                    </label>
+                </div>
+                <div class="chips" id="theme-chips">
+                    <button type="button" class="chip theme-indigo active" data-theme="indigo">Indigo</button>
+                    <button type="button" class="chip theme-emerald" data-theme="emerald">Emerald</button>
+                    <button type="button" class="chip theme-amber" data-theme="amber">Amber</button>
+                    <button type="button" class="chip theme-rose" data-theme="rose">Rose</button>
+                    <button type="button" class="chip theme-ocean" data-theme="ocean">Ocean</button>
+                    <button type="button" class="chip theme-violet" data-theme="violet">Violet</button>
+                    <button type="button" class="chip theme-lime" data-theme="lime">Lime</button>
+                    <button type="button" class="chip theme-orange" data-theme="orange">Orange</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FAVORITE NUMBERS ================= -->
+        <section id="screen-favorites" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Favorite Numbers</h2>
+                <button class="icon-btn edit-btn" type="button" data-share="favorites"
+                    aria-label="Share favorite numbers"><svg class="ico">
+                        <use href="#i-share" />
+                    </svg><span>Share</span></button>
+            </header>
+            <div class="card fav-card" id="fav-card">
+                <div id="fav-view">
+                    <div class="fav-head">
+                        <div class="fav-title"><svg class="ico">
+                                <use href="#i-star" />
+                            </svg><span>My Favorite Numbers</span></div>
+                        <span id="fav-count" class="fav-count">0/90 Selected</span>
+                        <button id="fav-edit" class="icon-btn edit-btn" type="button"
+                            aria-label="Edit favorite numbers"><svg class="ico">
+                                <use href="#i-edit" />
+                            </svg><span>Edit</span></button>
+                    </div>
+                    <div id="fav-chips" class="fav-chips"></div>
+                    <p id="fav-empty" class="fav-note hidden">You haven't chosen your favorite numbers yet.</p>
+                    <p id="fav-note" class="fav-note">These numbers will be included in your tickets - each on one
+                        ticket only, never repeated.</p>
+                    <button id="fav-choose" class="btn-primary hidden" type="button">Choose favorite numbers</button>
+                </div>
+                <div id="fav-editor" class="hidden">
+                    <div class="fav-head">
+                        <div class="fav-title"><svg class="ico">
+                                <use href="#i-star" />
+                            </svg><span>My Favorite Numbers</span></div>
+                        <span id="fav-live" class="fav-count">0/90 Selected</span>
+                    </div>
+                    <ul class="fav-rules">
+                        <li>Removing a number is free.</li>
+                        <li>Pick as many numbers as you like. There is no limit.</li>
+                        <li>Adding or changing a number will costs <b>🪙 50 coins per number</b>.</li>
+
+                    </ul>
+                    <div id="fav-grid" class="fav-grid"></div>
+                    <p id="fav-cost" class="fav-note hidden"></p>
+                    <p id="fav-done" class="fav-done hidden">✓ All 90 numbers selected</p>
+                    <div class="popup-actions fav-actions">
+                        <button id="fav-clear" class="btn-outline fav-clear" type="button">Remove all numbers</button>
+                        <button id="fav-save" class="btn-primary" type="button" disabled>Save</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WIN CARDS (shareable / downloadable gallery) ================= -->
+        <section id="screen-wincards" class="view">
+            <header class="page-head">
+                <button class="icon-btn" data-open="profile" aria-label="Back"><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></button>
+                <h2>Winning Cards</h2>
+                <span></span>
+            </header>
+            <div id="wincards-grid" class="wincards-wrap">
+                <p class="empty">Loading...</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ================= TOASTS ================= -->
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+    <!-- ================= POPUPS (shared style) ================= -->
+    <div id="leave-popup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>Leave this room?</h3>
+            <p class="popup-sub" id="leave-popup-sub">Your entry fee is not refunded.</p>
+            <div class="popup-actions">
+                <button id="leave-cancel" class="btn-outline">Cancel</button>
+                <button id="leave-confirm" class="btn-danger">Leave</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-user-popup" class="popup-overlay">
+        <div class="popup-box popup-user">
+            <button id="au-close" class="popup-x" type="button" aria-label="Close">&times;</button>
+            <h3 id="au-name">User</h3>
+            <p class="popup-sub" id="au-meta"></p>
+            <label class="au-label" for="au-alias">Name in leaderboard &amp; friends list</label>
+            <div class="alias-row">
+                <input id="au-alias" placeholder="Empty = the player's own name" maxlength="30" autocomplete="off">
+                <button id="au-alias-save" class="btn-primary btn-sm" type="button">Save</button>
+            </div>
+            <details id="au-history" class="au-history">
+                <summary class="au-toggle"><span>User history</span><svg class="ico">
+                        <use href="#i-back" />
+                    </svg></summary>
+                <div id="au-ledger" class="list"></div>
+            </details>
+            <button id="au-delete" class="btn-danger" type="button">Delete user</button>
+        </div>
+    </div>
+
+    <div id="lb-name-popup" class="popup-overlay">
+        <div class="popup-box popup-user">
+            <button id="lbn-close" class="popup-x" type="button" aria-label="Close">&times;</button>
+            <h3 id="lbn-title">Player</h3>
+            <p class="popup-sub">Name shown in the leaderboard &amp; friends list</p>
+            <div class="alias-row">
+                <input id="lbn-input" placeholder="Empty = the player's own name" maxlength="30" autocomplete="off">
+                <button id="lbn-save" class="btn-primary btn-sm" type="button">Save</button>
+            </div>
+            <button id="lbn-reset" class="btn-outline btn-sm" type="button" style="margin-top:var(--s2)">Use the
+                player's own name</button>
+        </div>
+    </div>
+
+    <div id="invite-ask-popup" class="popup-overlay" style="z-index:3000">
+        <div class="popup-box">
+            <div id="ia-q" class="ia-step">
+                <div class="inv-badge" aria-hidden="true" style="margin:0 auto">🎉</div>
+                <h3>Do you have an invite?</h3>
+                <p>Did a friend invite you to Housie?</p>
+                <div class="inv-actions">
+                    <button id="ia-yes" class="btn-primary signout-btn" type="button">Yes</button>
+                    <button id="ia-no" class="btn-outline signout-btn" type="button">No</button>
+                </div>
+            </div>
+            <div id="ia-code" class="ia-step hidden">
+                <h3>Enter invite code</h3>
+                <p>Type the 6-digit code your friend shared.</p>
+                <input id="ia-input" class="share-input ia-input" type="text" inputmode="numeric" pattern="[0-9]*"
+                    placeholder="6-digit code" autocomplete="off" maxlength="6">
+                <small id="ia-err" class="ia-err" role="alert"></small>
+                <button id="ia-verify" class="btn-primary signout-btn" type="button">Verify</button>
+                <button id="ia-back" class="link-btn" type="button">Back</button>
+            </div>
+            <div id="ia-done" class="ia-step hidden">
+                <div class="inv-badge" aria-hidden="true" style="margin:0 auto">✅</div>
+                <h3>Code verified</h3>
+                <p>You were invited by</p>
+                <b id="ia-name" class="ia-name">--</b>
+                <p>Claim your 25,000 coins in Welcome tasks, inside Profile &gt; Invite friends.</p>
+                <button id="ia-ok" class="btn-primary signout-btn" type="button">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-popup" class="popup-overlay">
+        <div class="popup-box">
+            <h3>Delete account?</h3>
+            <p class="popup-sub">This permanently removes your coins, history, stats, tickets and any rooms you host. It
+                cannot be undone.</p>
+            <div class="popup-actions">
+                <button id="delete-cancel" class="btn-outline">Cancel</button>
+                <button id="delete-confirm" class="btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reconnect-overlay" class="popup-overlay">
+        <div class="popup-box">
+            <span class="spinner" style="width:28px;height:28px;margin:0 auto;"></span>
+            <h3 id="reconnect-title">Reconnecting...</h3>
+            <p id="reconnect-sub" class="popup-sub">Restoring your room and tickets</p>
+        </div>
+    </div>
+
+    <!-- ================= WIN CARD (shareable / copyable / downloadable) ================= -->
+    <div id="wincard-popup" class="popup-overlay">
+        <div class="popup-box wincard-box">
+            <button id="wincard-close" class="popup-x" type="button" aria-label="Close">&times;</button>
+            <h3 id="wincard-title">Your winning card</h3>
+            <p id="wincard-meta" class="wc-meta"></p>
+            <div class="wincard-stage" id="wincard-stage">
+                <button id="wincard-prev" class="wc-nav prev" type="button" aria-label="Previous card"><svg class="wc-i"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M15 5l-7 7 7 7" />
+                    </svg></button>
+                <div class="wincard-imgwrap" id="wincard-tilt"><img id="wincard-img" alt="Your winning card"
+                        draggable="false"><i class="wc-shine"></i></div>
+                <button id="wincard-next" class="wc-nav next" type="button" aria-label="Next card"><svg class="wc-i"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M9 5l7 7-7 7" />
+                    </svg></button>
+            </div>
+            <div id="wincard-dots" class="wc-dots" aria-hidden="true"></div>
+            <input id="wincard-note" class="wc-note-in" type="text" maxlength="80"
+                placeholder="Add a note, e.g. my lucky ticket" autocomplete="off">
+            <div class="wincard-actions">
+                <button id="wincard-share" class="btn-primary" type="button"><svg class="ico" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="18" cy="5" r="3" />
+                        <circle cx="6" cy="12" r="3" />
+                        <circle cx="18" cy="19" r="3" />
+                        <path d="M8.6 10.7l6.8-4.4M8.6 13.3l6.8 4.4" />
+                    </svg><span>Share</span></button>
+                <button id="wincard-copy" class="btn-primary" type="button"><svg class="ico" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9" y="9" width="11" height="11" rx="2" />
+                        <path d="M5 15V5a1 1 0 0 1 1-1h10" />
+                    </svg><span>Copy</span></button>
+                <button id="wincard-download" class="btn-primary" type="button"><svg class="ico" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3v12" />
+                        <path d="M7 11l5 5 5-5" />
+                        <path d="M5 21h14" />
+                    </svg><span>Download</span></button>
+                <button id="wincard-fav" class="btn-primary" type="button" aria-pressed="false"><svg class="ico"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <path
+                            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                    </svg><span>Favorite</span></button>
+                <button id="wincard-del" class="btn-primary btn-del" type="button"><svg class="ico" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />
+                    </svg><span>Delete</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 5. RESULT / WIN SCREEN ================= -->
+    <div id="win-screen" class="win-overlay">
+        <div class="confetti-container"></div>
+        <div class="win-box">
+            <h1>🎉 Congratulations 🎉</h1>
+            <p id="win-text">You won the game!</p>
+            <div class="win-stats">
+                <div><b id="win-coins">+0</b><small>Coins</small></div>
+                <div><b id="win-bonus">+0</b><small>Winning bonus</small></div>
+            </div>
+            <div class="popup-actions">
+                <button id="win-share" class="btn-outline">Share win</button>
+                <button id="win-again" class="btn-outline">Play again</button>
+                <button id="win-home" class="btn-primary">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DEVELOPER GAME RESULT ================= -->
+    <div id="devresult-screen" class="win-overlay">
+        <div class="win-box dev-result-box">
+            <h1 id="devresult-title">🎮 Game Complete</h1>
+            <p id="devresult-sub">Here's how it went.</p>
+            <div class="devresult-balances">
+                <div><small id="devresult-dev-label">Developer</small><b id="devresult-dev-coins">0</b></div>
+                <div><small id="devresult-opp-label">You</small><b id="devresult-opp-coins">0</b></div>
+            </div>
+            <div class="devresult-pot"><small>Total coins</small><b id="devresult-pot">0</b></div>
+            <div id="devresult-prizes" class="list devresult-prizes"></div>
+            <small id="devresult-tx" class="live-note"></small>
+            <div class="popup-actions">
+                <button id="devresult-again" class="btn-outline">Play Again</button>
+                <button id="devresult-home" class="btn-primary">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script defer src="persist.js?v=2"></script>
+    <script>
+        /* load the game only after the device data file has been read */
+        document.addEventListener("DOMContentLoaded", function () {
+            if (!window.Persist) {   // persist.js missing: plain browser storage so the page never crashes
+                window.Persist = {
+                    ready: Promise.resolve(), native: false, where: "browser storage",
+                    getItem: function (k) { return localStorage.getItem(k); },
+                    setItem: function (k, v) { if (/^housie\.(active\.|devcalled\.|pref\.)/.test(k)) localStorage.setItem(k, v); },   // room data only
+                    removeItem: function (k) { localStorage.removeItem(k); },
+                    flush: function () { return Promise.resolve(); },
+                    dump: function () { var o = {}; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k.indexOf("housie.") === 0) o[k] = localStorage.getItem(k); } return o; },
+                    purge: function (t) { Object.keys(this.dump()).forEach(function (k) { if (k.indexOf(t) !== -1) localStorage.removeItem(k); }); return Promise.resolve(); },
+                    ok: true
+                };
+            }
+            Persist.ready.then(function () {
+                var s = document.createElement("script");
+                s.src = "script.js?v=88";
+                document.body.appendChild(s);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
